@@ -1,0 +1,10 @@
+export { default as AgreementTermsConditions } from './TermsAndConditions';
+export { default as ConfirmationWelcome } from './ConfirmationWelcome';
+export { default as DashboardTour } from './DashboardTour';
+export { default as DocumentPreference } from './DocumentPreference';
+export { default as IndustrySelection } from './IndustrySelection';
+export { default as LegalInfo } from './LegalInfo';
+export { default as PersonalizedTemplate } from './PersonalizedTemplate';
+export { default as BusinessSetup } from './BusinessSetup';
+export { default as UserProfileSetup } from './UserProfileSetup';
+export { default as AddMembersOnboarding } from './AddMembersOnboarding';
