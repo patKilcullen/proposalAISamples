@@ -24,7 +24,10 @@ import { HandymanTwoTone } from '@mui/icons-material';
 
 // VALIDATION for form
 const validationSchema = yup.object({
-  businessEmail: yup.string().email('Invalid email format').required('Required'),
+  businessEmail: yup
+    .string()
+    .email('Invalid email format')
+    .required('Required'),
   businessUrl: yup.string().url('Invalid url format').required('Required'),
   businessServices: yup.string().required('Required'),
   businessAddress: yup.string().required('Required'),
@@ -34,44 +37,48 @@ const validationSchema = yup.object({
   businessIndustry: yup.string().required('Required'),
   businessRepName: yup.string().required('Required'),
   businessRepRole: yup.string().required('Required'),
-  businessRepEmail: yup.string().email('Invalid email format').required('Required'),
+  businessRepEmail: yup
+    .string()
+    .email('Invalid email format')
+    .required('Required'),
 });
 
-const BusinessInfo = ({ onboardingForm, onboardingSave, setOnboardingSave }) => {
+const BusinessInfo = ({
+  onboardingForm,
+  onboardingSave,
+  setOnboardingSave,
+}) => {
   const { user } = useAuthUser();
   const { getAuthUser } = useJWTAuthActions();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const business = useSelector(({ business }) => business.singleBusiness);
   const { loading } = useSelector(({ common }) => common);
+  const [editMode, setEditMode] = useState(onboardingForm ? true : false);
+  const [businessLogo, setBusinessLogo] = useState(null);
+  const [businessLogoEncoded, setBusinessLogoEncoded] = useState(null);
 
   //  GET BUSINESS INFO on mount if user has associated business ID
   useEffect(() => {
     if (user.businessId) {
-      dispatch(onGetBusinessInfo(user.businessId._id))
-    
+      dispatch(onGetBusinessInfo(user.businessId._id));
     }
   }, [user.businessId, dispatch]);
 
-  const [editMode, setEditMode] = useState(onboardingForm ? true : false);
+  // TOGGLE EDIT MODE
   const toggleEditMode = () => {
     setEditMode(!editMode);
   };
 
-
-
-    // BUSINESS LOGO: if logo included, encode it before saving
-  const [businessLogo, setBusinessLogo] = useState(null);
-const [businessLogoEncoded, setBusinessLogoEncoded] = useState(null)
- 
-  useEffect(()=>{
-    if(businessLogo?.length > 0){
-handleFileChange(businessLogo)
+  // BUSINESS LOGO: if logo included, encode it before saving
+  useEffect(() => {
+    if (businessLogo?.length > 0) {
+      handleFileChange(businessLogo);
     }
-  },[businessLogo])
+  }, [businessLogo]);
 
-   const handleFileChange = (logo) => {
-     const file = logo[0];
+  const handleFileChange = (logo) => {
+    const file = logo[0];
     if (file) {
       // Convert the file to a base64 string
       const reader = new FileReader();
@@ -85,8 +92,7 @@ handleFileChange(businessLogo)
     <Box
       sx={{
         position: 'relative',
-        // maxWidth: 550,
-        overflow: "auto"
+        overflow: 'auto',
       }}
     >
       <Formik
@@ -106,13 +112,15 @@ handleFileChange(businessLogo)
           businessRepName: '',
           businessRepRole: '',
           businessRepEmail: '',
-          tin: ""
-
+          tin: '',
         }}
         validationSchema={validationSchema}
-        onSubmit={async (data, { setSubmitting, setFieldTouched, submitForm, setErrors }) => {
+        onSubmit={async (
+          data,
+          { setSubmitting, setFieldTouched, submitForm, setErrors },
+        ) => {
           setSubmitting(true);
-         
+
           try {
             // if there is no businessID, then the form will be creating a business
             if (!user.businessId) {
@@ -125,14 +133,16 @@ handleFileChange(businessLogo)
                   businessOverview: data.businessOverview,
                   businessType: data.businessType,
                   url: data.businessUrl,
-                  industry: data.customIndustry ? data.customIndustry : data.businessIndustry,
+                  industry: data.customIndustry
+                    ? data.customIndustry
+                    : data.businessIndustry,
                   businessServices: data.businessServices,
                   userId: data._id,
                   businessRepName: data.businessRepName,
                   businessRepRole: data.businessRepRole,
                   businessRepEmail: data.businessRepEmail,
                   tin: data.tin,
-                })
+                }),
               );
 
               // UPDATE USER TO BE ADMIN IF THEY CREATE A BUSINESS
@@ -140,7 +150,7 @@ handleFileChange(businessLogo)
                 onUpdateUser({
                   ...user,
                   role: 'admin',
-                })
+                }),
               );
 
               // Dispatch successful, update user and scroll to the top
@@ -158,10 +168,10 @@ handleFileChange(businessLogo)
               setFieldTouched('businessRepName', false, true);
               setFieldTouched('businessRepRole', false, true);
               setFieldTouched('businessRepEmail', false, true);
-                 setFieldTouched('tin', false, true);
+              setFieldTouched('tin', false, true);
             } else {
               // If there is a businessID associated to user, edit business
-        
+
               await dispatch(
                 onEditPartialBusiness({
                   address: data.businessAddress,
@@ -171,7 +181,9 @@ handleFileChange(businessLogo)
                   businessOverview: data.businessOverview,
                   businessType: data.businessType,
                   url: data.businessUrl,
-                  industry: data.customIndustry ? data.customIndustry : data.businessIndustry,
+                  industry: data.customIndustry
+                    ? data.customIndustry
+                    : data.businessIndustry,
                   businessServices: data.businessServices,
                   userId: data._id,
                   _id: user.businessId._id,
@@ -179,8 +191,8 @@ handleFileChange(businessLogo)
                   businessRepRole: data.businessRepRole,
                   businessRepEmail: data.businessRepEmail,
                   logo: businessLogoEncoded || null,
-                  tin: data.tin || null
-                })
+                  tin: data.tin || null,
+                }),
               );
 
               // Dispatch successful, update user and scroll to the top, turn edit mode off
@@ -189,6 +201,7 @@ handleFileChange(businessLogo)
               toggleEditMode();
             }
 
+            // ONBOARDING SAVE
             if (onboardingSave) {
               submitForm();
             }
@@ -226,7 +239,6 @@ handleFileChange(businessLogo)
           );
         }}
       </Formik>
-          
     </Box>
   );
 };

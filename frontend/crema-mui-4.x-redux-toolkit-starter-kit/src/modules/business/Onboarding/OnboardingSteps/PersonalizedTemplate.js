@@ -20,8 +20,15 @@ const PersonalizedTemplates = (
   ref,
 ) => {
   const formikRef = useRef();
+  const { loading, hideMessage } = useSelector(({ common }) => common);
+  const [selectedProposal, setSelectedProposal] = useState('');
+  const [selectedAgreement, setSelectedAgreement] = useState('');
+  const [askToPreviewProposal, setAskToPreviewProposal] = useState(false);
+  const [askToPreviewAgreement, setAskToPreviewAgreement] = useState(false);
+  const [previewAgreement, setPreviewAgreement] = useState(false);
+  const [previewProposal, setPreviewProposal] = useState(false);
 
-  const { loading,   hideMessage } = useSelector(({ common }) => common);
+  // sset errors
   useEffect(() => {
     if (formikRef.current) {
       formikRef.current.setErrors({
@@ -47,13 +54,6 @@ const PersonalizedTemplates = (
   }, [onboardingSave]);
 
   // SELECT/PREVIEW Proposals and agreements, if pros=posal/agreement is selected, show preview button, if button is pressed, show preview
-  const [selectedProposal, setSelectedProposal] = useState('');
-  const [selectedAgreement, setSelectedAgreement] = useState('');
-  const [askToPreviewProposal, setAskToPreviewProposal] = useState(false);
-  const [askToPreviewAgreement, setAskToPreviewAgreement] = useState(false);
-  const [previewAgreement, setPreviewAgreement] = useState(false);
-  const [previewProposal, setPreviewProposal] = useState(false);
-
   const handleSelectProposal = (style) => {
     setSelectedProposal(style);
     setAskToPreviewProposal(true);
@@ -78,7 +78,7 @@ const PersonalizedTemplates = (
     //       _id: user.businessId,
     //     }),
     //   );
-      // hideMessage();
+    // hideMessage();
     // } catch (error) {
     //   console.error('Error during onSubmit:', error);
     // } finally {
@@ -135,8 +135,10 @@ const PersonalizedTemplates = (
                       handleSelectProposal(e.target.value);
                     }}
                   >
-                    {proposalStyles?.map((style, index ) => (
-                      <MenuItem key={index} value={style}>{style.type}</MenuItem>
+                    {proposalStyles?.map((style, index) => (
+                      <MenuItem key={index} value={style}>
+                        {style.type}
+                      </MenuItem>
                     ))}
                   </Select>
                   {/* If agreement is selected, show preview button */}
@@ -163,8 +165,10 @@ const PersonalizedTemplates = (
                       handleSelectAgreement(e.target.value);
                     }}
                   >
-                    {agreementStyles?.map((style, index ) => (
-                      <MenuItem key={index} value={style}>{style.type}</MenuItem>
+                    {agreementStyles?.map((style, index) => (
+                      <MenuItem key={index} value={style}>
+                        {style.type}
+                      </MenuItem>
                     ))}
                   </Select>
                 </AppCard>

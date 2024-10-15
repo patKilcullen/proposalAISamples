@@ -25,10 +25,10 @@ const Canvas = ({
         .exportImage('png')
         .then((data) => {
           if (role === 'clientAdmin') {
-            handleAddClientSignature({signature: data, type: "canvas"});
+            handleAddClientSignature({ signature: data, type: 'canvas' });
           }
           if (role === 'businessAdmin') {
-            handleAddBusinessSignature({signature: data, type: "canvas"});
+            handleAddBusinessSignature({ signature: data, type: 'canvas' });
           }
           sendOtp();
         })

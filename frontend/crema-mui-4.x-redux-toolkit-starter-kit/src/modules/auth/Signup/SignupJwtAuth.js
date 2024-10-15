@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { Checkbox, TextField } from '@mui/material';
 import { Form, Formik } from 'formik';
@@ -15,47 +15,40 @@ import AuthWrapper from '../AuthWrapper';
 
 import PasswordChecklist from 'react-password-checklist';
 
-
-
-  import GoogleAuthSignUp from '../GoogleAuth/GoogleSignUp';
+import GoogleAuthSignUp from '../GoogleAuth/GoogleSignUp';
 
 // VALIDATION FOR FORM
 const validationSchema = yup.object({
-  name: yup.string().required(<IntlMessages id="validation.nameRequired" />),
+  name: yup.string().required(<IntlMessages id='validation.nameRequired' />),
   email: yup
     .string()
-    .email(<IntlMessages id="validation.emailFormat" />)
-    .required(<IntlMessages id="validation.emailRequired" />),
+    .email(<IntlMessages id='validation.emailFormat' />)
+    .required(<IntlMessages id='validation.emailRequired' />),
   password: yup
     .string()
-    .required(<IntlMessages id="validation.passwordRequired" />),
+    .required(<IntlMessages id='validation.passwordRequired' />),
 });
 
 const SignupJwtAuth = () => {
   const { signUpUser, signUpUserGoogle } = useAuthMethod();
-    const [agreeToTermsAndPolicy, setAgreeToTermsAndPolicy] = useState(false);
-    
-
-const [password, setPassword] = useState('');
-const [confrimPassword, setConfrimPassword] = useState('');
-const [showErrors, setShowErrors] = useState(false)
+  const [agreeToTermsAndPolicy, setAgreeToTermsAndPolicy] = useState(false);
+  const [password, setPassword] = useState('');
+  const [confrimPassword, setConfrimPassword] = useState('');
+  const [showErrors, setShowErrors] = useState(false);
 
 
-
-
+  // on google success
   const googleSuccess = async (res) => {
-
     try {
       signUpUserGoogle(res);
     } catch (error) {
       console.log(error);
     }
   };
-  
 
   return (
     <AuthWrapper>
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column',  }}>
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', mb: 5 }}>
           <Formik
             validateOnChange={true}
@@ -221,7 +214,7 @@ const [showErrors, setShowErrors] = useState(false)
                       <IntlMessages id='Privacy Policy' />
                     </Button>
                   </Link>
-                  <Box sx={{ margin: "1px" }}>&</Box>
+                  <Box sx={{ margin: '1px' }}>&</Box>
                   <Link
                     to='https://www.mixcommerce.co/terms-of-service/'
                     target='_blank'
@@ -236,11 +229,9 @@ const [showErrors, setShowErrors] = useState(false)
                         fontSize: '13px',
                       }}
                     >
-                     
                       <IntlMessages id='common.termConditions' />
                     </Button>
                   </Link>
-                
                 </Box>
 
                 <div>
@@ -298,8 +289,8 @@ const [showErrors, setShowErrors] = useState(false)
           </Box>
         </Box>
         {/* FETCH CONTEXT */}
-      <AppInfoView type='context' />
-         {/* <AppInfoView /> */}
+        <AppInfoView type='context' />
+        {/* <AppInfoView /> */}
       </Box>
     </AuthWrapper>
   );

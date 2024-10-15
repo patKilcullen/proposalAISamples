@@ -46,16 +46,6 @@ const AcceptProposal = () => {
   useEffect(() => {
     displayNewRole(); // set role title to be dispalyed
     dispatch(getSingleProposal(pid, token)); //get Proposal
-
-    // VERIFY PROPOSAL OTP FROM useParams to ensure user got to page through email
-    // const verify = async () => {
-    //   try {
-    //     await dispatch(verifyProposal({ proposalId: pid, token }));
-    //   } catch (error) {
-    //     navigate('/error-pages/error-404');
-    //   }
-    // };
-    // verify();
   }, []);
 
   // NEW ROLE DISPLAY... het role from useParams(role signing up for) and get full title

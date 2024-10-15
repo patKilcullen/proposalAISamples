@@ -6,15 +6,14 @@ import { styled } from '@mui/material/styles';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button, Box } from '@mui/material';
 import { useAuthUser } from '@crema/hooks/AuthHooks';
-
 import { getRoles } from 'utils/roleUtils';
 import { roleStatusDisplay } from 'utils/roleStatusDisplay';
 import UsersSelect from 'modules/Users/AllProposalUsers/UsersSelect';
 import SingleUser from 'modules/Users/AllProposalUsers/SingleUser';
 import AppTooltip from '@crema/components/AppTooltip';
 import AppsDeleteIcon from '@crema/components/AppsDeleteIcon';
-
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+
 const StyledTableCell = styled(TableCell)(() => ({
   fontSize: 14,
   padding: 8,
@@ -32,25 +31,31 @@ const StyledTableCell = styled(TableCell)(() => ({
 const TableItem = ({ data, handleDeleteProposal }) => {
   const navigate = useNavigate();
   const { user } = useAuthUser();
+  const [role, setRole] = useState('');
+
   // CONFIGURE DATE: get date from proposal, create a new date out of it, and run DAte methods on it to show mm/dd/yyyy
   const date = new Date(data.updatedAt);
   const fullDate = `${date.getMonth() + 1}/${date.getDate()}/${
     date.getFullYear() % 100
   }`;
 
-  const [role, setRole] = useState('');
+// set user role
   useEffect(() => {
     let userRole = getRoles(data, user);
-
     setRole(userRole);
   }, [data]);
 
   return (
     <TableRow key={data.id} className='item-hover'>
-  {/* TITLE */}
-       <StyledTableCell align='left' sx={{ width: '150px' }}>
+      {/* TITLE */}
+      <StyledTableCell align='left' sx={{ width: '150px' }}>
         <Button
-          sx={{ marginLeft: '-20px', width: '150px', display: "flex", overflow: "auto"  }}
+          sx={{
+            marginLeft: '-20px',
+            width: '150px',
+            display: 'flex',
+            overflow: 'auto',
+          }}
           onClick={() =>
             navigate(
               data.status === 'draft' || data.status === 'in-revision'
@@ -59,13 +64,12 @@ const TableItem = ({ data, handleDeleteProposal }) => {
             )
           }
         >
-        {data.title ? 
-        <AppTooltip title={data.title}>
-        {data.title} 
-        </AppTooltip>
-        :  <InfoOutlinedIcon />} 
+          {data.title ? (
+            <AppTooltip title={data.title}>{data.title}</AppTooltip>
+          ) : (
+            <InfoOutlinedIcon />
+          )}
         </Button>
-        
       </StyledTableCell>
 
       {/* CLIENT NAME */}
@@ -75,9 +79,9 @@ const TableItem = ({ data, handleDeleteProposal }) => {
           user={
             data.clientId ? data.clientId : { userName: 'No client assigned' }
           }
-          sxStyle={{ width: '150px', }}
-        role={role}
-        hideRoleDisplay={true}
+          sxStyle={{ width: '150px' }}
+          role={role}
+          hideRoleDisplay={true}
         />
       </StyledTableCell>
 
@@ -87,8 +91,8 @@ const TableItem = ({ data, handleDeleteProposal }) => {
           user={data.businessId}
           isBusiness={true}
           sxStyle={{ width: '150px' }}
-             role={role}
-             hideRoleDisplay={true}
+          role={role}
+          hideRoleDisplay={true}
         />
       </StyledTableCell>
       {/* ROLE */}

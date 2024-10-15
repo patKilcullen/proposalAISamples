@@ -18,11 +18,12 @@ export default function SendProposalContact({
   const dispatch = useDispatch();
   const business = useSelector(({ business }) => business.singleBusiness);
   const uniqueEmails = useSelector(({ contacts }) => contacts.contacts);
-  const [message, setMessage] = useState('');
   const { fetchError } = useInfoViewActionsContext();
-
   const { user } = useAuthUser();
+  const [message, setMessage] = useState('');
+  const [selectedEmails, setSelectedEmails] = useState([]);
 
+  // GET CONTACTS
   useEffect(() => {
     if (business?._id) {
       dispatch(onGetUserContacts(user._id));
@@ -56,10 +57,12 @@ export default function SendProposalContact({
       return;
     }
 
+    // SEND TO CLIENT
     sendToClient({
       clientEmails: adminEmails,
     });
 
+    // SEND INVITE TO ALL
     for (const email of roleEmails) {
       dispatch(
         onSendUserInvite({
@@ -87,11 +90,13 @@ export default function SendProposalContact({
     }
   }, [showContacts]);
 
-  const [selectedEmails, setSelectedEmails] = useState([]);
+
+  // add existing emai lto emails
   useEffect(() => {
     setSelectedEmails([existingEmail]);
   }, [existingEmail]);
 
+  // CLOSE GCONTACTS
   const handleCloseContacts = () => {
     setShowContacts(false);
   };

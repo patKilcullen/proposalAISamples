@@ -7,8 +7,8 @@ import ProposalVerification from "../models/proposalVerisifaction.js";
 
 
 const userProposalAuthorization = (proposal, user) => {
+  
   // CHECK IF USER IS ASSOCAITED WITH PROPOSAL
-
   return (
     proposal?.clientId?._id?.toString() === user?._id.toString() ||
     // Check if the user is listed in the client collaborators

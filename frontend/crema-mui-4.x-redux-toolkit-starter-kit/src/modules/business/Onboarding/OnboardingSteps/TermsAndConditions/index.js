@@ -4,8 +4,11 @@ import { Link } from 'react-router-dom';
 import { useAuthUser } from '@crema/hooks/AuthHooks';
 import { Formik, Form } from 'formik';
 import AppAnimate from '@crema/components/AppAnimate';
-import { Box, Checkbox,Button } from '@mui/material';
-import { onEditPartialBusiness, onUpdateUser } from '../../../../../toolkit/actions';
+import { Box, Checkbox, Button } from '@mui/material';
+import {
+  onEditPartialBusiness,
+  onUpdateUser,
+} from '../../../../../toolkit/actions';
 import IntlMessages from '@crema/helpers/IntlMessages';
 import TermsAndConditions from './termsAndConditions';
 import AppComponentHeader from '@crema/components/AppComponentHeader';
@@ -79,66 +82,67 @@ const AgreementTermsConditions = (
       >
         <AppAnimate animation='transition.slideUpIn'>
           <Form noValidate autoComplete='off'>
-            <Box component='span'
-              sx={{
-                color: (theme) => theme.palette.primary.main,
-                cursor: 'pointer',
-                display: "flex",
-                alignItems: "center"
-              }}>
-            <Checkbox
-              sx={{
-                ml: -3,
-              }}
-              onChange={() => setAgreeToTerms(!agreeToTerms)}
-            />
             <Box
               component='span'
               sx={{
-                mr: 2,
-                color: 'grey.500',
+                color: (theme) => theme.palette.primary.main,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
               }}
             >
-              <IntlMessages id='common.iAgreeTo' />
+              <Checkbox
+                sx={{
+                  ml: -3,
+                }}
+                onChange={() => setAgreeToTerms(!agreeToTerms)}
+              />
+              <Box
+                component='span'
+                sx={{
+                  mr: 2,
+                  color: 'grey.500',
+                }}
+              >
+                <IntlMessages id='common.iAgreeTo' />
+              </Box>
+
+              <Link
+                to='https://www.mixcommerce.co/privacy-policy/'
+                target='_blank'
+              >
+                <Button
+                  component='span'
+                  sx={{
+                    color: (theme) => theme.palette.primary.main,
+                    cursor: 'pointer',
+                    marginLeft: '-10px',
+                    marginRight: '-10px',
+                    fontSize: '13px',
+                  }}
+                >
+                  <IntlMessages id='Privacy Policy' />
+                </Button>
+              </Link>
+              <Box sx={{ margin: 0 }}>&</Box>
+              <Link
+                to='https://www.mixcommerce.co/terms-of-service/'
+                target='_blank'
+              >
+                <Button
+                  component='span'
+                  sx={{
+                    color: (theme) => theme.palette.primary.main,
+                    cursor: 'pointer',
+                    marginLeft: '-10px',
+                    marginRight: 0,
+                    fontSize: '13px',
+                  }}
+                >
+                  <IntlMessages id='common.termConditions' />
+                </Button>
+              </Link>
             </Box>
-        
-            
-             <Link
-                    to='https://www.mixcommerce.co/privacy-policy/'
-                    target='_blank'
-                  >
-                    <Button
-                      component='span'
-                      sx={{
-                        color: (theme) => theme.palette.primary.main,
-                        cursor: 'pointer',
-                        marginLeft: '-10px',
-                        marginRight: '-10px',
-                        fontSize: '13px',
-                      }}
-                    >
-                      <IntlMessages id='Privacy Policy' />
-                    </Button>
-                  </Link>
-                  <Box sx={{ margin: 0 }}>&</Box>
-                  <Link
-                    to='https://www.mixcommerce.co/terms-of-service/'
-                    target='_blank'
-                  >
-                    <Button
-                      component='span'
-                      sx={{
-                        color: (theme) => theme.palette.primary.main,
-                        cursor: 'pointer',
-                        marginLeft: '-10px',
-                        marginRight: 0,
-                        fontSize: '13px',
-                      }}
-                    >
-                      <IntlMessages id='common.termConditions' />
-                    </Button>
-                  </Link>
-                 </Box>
           </Form>
           {agreeError ? (
             <Box

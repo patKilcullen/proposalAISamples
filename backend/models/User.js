@@ -22,43 +22,15 @@ const userSchema = new mongoose.Schema({
   googleId: { type: String },
   businessId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Business",
-    // ROLE IN PROPOSAL
-    // validate: {
-    //   validator: function (value) {
-    //     if (this.role === "admin" || this.role === "user") {
-    //       return true; // Allow any value, including undefined, for businessUser
-    //     } else {
-    //       return !value; // Ensure that the value is undefined or null for other roles
-    //     }
-    //   },
-    //   message: `Business ID should not be set for non-business users`,
-    // },
-  },
-  // clientName: {
-  //   type: String,
-  //   validate: {
-  //     validator: function (value) {
-  //       if (this.role === "client") {
-  //         return true; // Allow any value, including undefined, for client
-  //       } else {
-  //         return !value; // Ensure that the value is undefined or null for other roles
-  //       }
-  //     },
-  //     message: `Client Name should not be set for non-clients`,
-  //   },
-  // },
+    ref: "Business"},
   role: {
     type: String,
-    // UPDATED
     enum: ["client", "admin"],
-    //
   },
   verified: {
     type: Boolean,
     default: false,
   },
-
   address: {
     type: String,
   },

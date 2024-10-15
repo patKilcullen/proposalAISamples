@@ -10,9 +10,6 @@ import { getSingleProposal,} from '../../../../../toolkit/actions';
 import { removeProposal } from '../../../../../toolkit/reducers/Proposals';
 import AppInfoView from '@crema/components/AppInfoView';
 
-// This componented is tied to the edit-proposal route in core/approutes
-// it runs the createProposalComponent but it includes a slectedBlog, which
-// directs it to EditProposalTemplate
 
 const EditProposal = () => {
   const { id } = useParams();
@@ -20,8 +17,8 @@ const EditProposal = () => {
   const selectedProposal = useSelector(({ proposals }) => proposals.proposal);
   const navigate = useNavigate()
 
-
   
+// get proposal or get error
   useEffect(() => {
     dispatch(getSingleProposal(id)).then((res)=>{
         if(res?.response?.status === 403){

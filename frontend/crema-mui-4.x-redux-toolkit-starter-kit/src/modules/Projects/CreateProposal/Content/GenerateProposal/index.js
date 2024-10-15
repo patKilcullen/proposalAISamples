@@ -1,30 +1,25 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Box, Button, Typography } from '@mui/material';
-
 import 'react-quill/dist/quill.snow.css';
-
 import AppsContainer from '@crema/components/AppsContainer';
-
 import FormContainer from './FormContainer';
-
 import CreateProposalSideBar from './CreateProposalSidebar';
-
 import AppCard from '@crema/components/AppCard';
+
 const GenerateProposal = ({
   sendToClient,
   selectedProposal,
   setFieldValue,
   businessInfo,
-
   validationError,
   setFormSection,
   changeForm,
   checkFormErrors,
   setChangeForm,
-  validationErrorList,
 }) => {
   // FORM SECTION: determines and changes the current section (business info, client info, proposal info) of the from
   const [activeSection, setActiveSection] = useState('businessInformation');
+
   // CHANGE FORM: when changeForm changes in parent, acter checking for erros,
   // if it is true(meaning no errors) change the section to next form
   useEffect(() => {
@@ -103,7 +98,6 @@ const GenerateProposal = ({
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'flex-end',
-              // justifyContent: "center"
             }}
           >
             {/* PREVIOUS BUTTON on client info or proposal info form, include previous buttong to get to last part of from */}
@@ -126,7 +120,6 @@ const GenerateProposal = ({
             {activeSection !== 'proposalInformation' && (
               <Button
                 onClick={() => checkFormErrors('next')}
-                //  onClick={checkFormErrors}
                 sx={{
                   width: '100px',
                   alignSelf: 'flex-end',
@@ -134,7 +127,6 @@ const GenerateProposal = ({
                 }}
                 color='primary'
                 variant='contained'
-                //  type="submit"
               >
                 Next
               </Button>
@@ -152,7 +144,6 @@ const GenerateProposal = ({
                 variant='contained'
                 type='submit'
                 onClick={() => checkFormErrors('generate')}
-                //  onClick={checkFormErrors}
               >
                 Generate
               </Button>
@@ -168,8 +159,6 @@ const GenerateProposal = ({
           </Box>
         ) : null}
       </AppsContainer>
-
-      {/* BUTTONS */}
     </>
   );
 };

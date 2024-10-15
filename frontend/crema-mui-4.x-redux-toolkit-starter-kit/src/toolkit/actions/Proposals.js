@@ -25,18 +25,18 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 export const onGenerateProposal = createAsyncThunk(
   'proposal/create',
   async (proposal, { dispatch }) => {
-
     try {
       const { messages } = appIntl();
-      dispatch({ type: FETCH_START, message: "ProposalAI is generating your proposal." });
+      dispatch({
+        type: FETCH_START,
+        message: 'ProposalAI is generating your proposal.',
+      });
       const response = await jwtAxios.post(
         `business/proposal/create-proposal`,
         proposal,
       );
 
       if (response.status === 201) {
-        //
-
         dispatch({ type: CREATE_NEW_PROPOSAL, payload: response.data });
         return response.data;
       } else {
@@ -45,8 +45,6 @@ export const onGenerateProposal = createAsyncThunk(
     } catch (error) {
       dispatch({
         type: FETCH_ERROR,
-        // payload: error.response.data.message || error.message,
-        //  payload: `Error Creating Proposal: ${error?.response?.data?.message || error?.message || 'Something went wrong'}`,
       });
       throw error;
     }
@@ -60,7 +58,10 @@ export const onGenerateProposalTEST = createAsyncThunk(
     const { messages } = appIntl();
 
     try {
-      dispatch({ type: FETCH_START, message: "ProposalAI is generating your proposal." });
+      dispatch({
+        type: FETCH_START,
+        message: 'ProposalAI is generating your proposal.',
+      });
       const response = await jwtAxios.post(
         `business/proposal/create-proposal-test`,
         proposal,
@@ -77,34 +78,26 @@ export const onGenerateProposalTEST = createAsyncThunk(
   },
 );
 
-
-// GENERATE TEST PROPOSAL
+// TEST APP INFO VIEW... used for testing stack app info view
+// TODO: Add to dev mode
 export const AppInforViewTest = createAsyncThunk(
   'testy',
   async (proposal, { dispatch }) => {
     const { messages } = appIntl();
 
     try {
-      // dispatch({ type: FETCH_START, message: "UNO ." });
-
-         dispatch({ type: FETCH_SUCCESS,message: "UNO." });
-         setTimeout(()=>{
-           dispatch({ type: FETCH_SUCCESS,message: "dos." });
-         setTimeout(()=>{
- dispatch({ type: FETCH_SUCCESS,message: "TRES." });
-         }, 500)
-
-         }, 500)
-          // dispatch({ type: FETCH_SUCCESS,message: "DOS." });
-        
-    // dispatch({ type: FETCH_SUCCESS,message: "TRES." });
+      dispatch({ type: FETCH_SUCCESS, message: 'UNO.' });
+      setTimeout(() => {
+        dispatch({ type: FETCH_SUCCESS, message: 'dos.' });
+        setTimeout(() => {
+          dispatch({ type: FETCH_SUCCESS, message: 'TRES.' });
+        }, 500);
+      }, 500);
     } catch (error) {
       throw new Error(error.message);
     }
   },
 );
-
-
 
 // GET BUSINESS PROPOSALS
 export const onGetBusinessProposals = (businessId) => {
@@ -128,14 +121,12 @@ export const onGetBusinessProposals = (businessId) => {
       .catch((error) => {
         dispatch({
           type: FETCH_ERROR,
-          // payload: error.response.data.message || error.message,
           payload: `Error Getting Business Proposals: ${
             error?.response?.data?.message ||
             error?.message ||
             'Something went wrong'
           }`,
         });
-        // throw `Error Getting Business Proposals: ${error?.response?.data?.message || error?.message || 'Something went wrong'}`
       });
   };
 };
@@ -170,19 +161,18 @@ export const onGetClientProposals = (clientId) => {
 // GET SINGLE PROPOSAL
 export const getSingleProposal = (id, token) => {
   const { messages } = appIntl();
-
   return async (dispatch) => {
     dispatch({ type: FETCH_START });
-
     try {
-      const response = await jwtAxios.get(`business/proposal/${id}?token=${token}`, {
-        params: {
-          id,
+      const response = await jwtAxios.get(
+        `business/proposal/${id}?token=${token}`,
+        {
+          params: {
+            id,
+          },
         },
-      });
-
+      );
       if (response.status === 200) {
-
         dispatch({ type: FETCH_SUCCESS });
         dispatch({
           type: GET_SINGLE_PROPOSAL,
@@ -198,10 +188,8 @@ export const getSingleProposal = (id, token) => {
       }
     } catch (error) {
       console.error('Error fetching proposal: ', error);
- 
-      if(error.response.status === 403){
-    return error
-    
+      if (error.response.status === 403) {
+        return error;
       }
       dispatch({
         type: FETCH_ERROR,
@@ -224,7 +212,6 @@ export const onEditProposal = (proposal) => {
         content: proposal.version.content,
       })
       .then((data) => {
-  
         if (data.status === 200) {
           dispatch({ type: FETCH_SUCCESS, message: 'Proposal draft saved' });
           dispatch({
@@ -250,10 +237,8 @@ export const onEditProposal = (proposal) => {
 
 export const onEditPartialProposal = (proposal) => {
   const { messages } = appIntl();
-
   return async (dispatch) => {
     dispatch({ type: FETCH_START });
-
     try {
       const response = await jwtAxios.patch(
         `business/proposal/update/${proposal._id}`,
@@ -318,10 +303,8 @@ export const onDeleteProposal = (id) => {
 
 export const onEditProposalRevision = ({ proposalInfo, content, creator }) => {
   const { messages } = appIntl();
-
   return async (dispatch) => {
     dispatch({ type: FETCH_START });
-
     try {
       const response = await jwtAxios.patch(
         `business/proposal/update-version/${proposalInfo._id}`,
@@ -344,7 +327,6 @@ export const onEditProposalRevision = ({ proposalInfo, content, creator }) => {
       }
     } catch (error) {
       console.error('Error during proposal revision edit:', error);
-
       dispatch({
         type: FETCH_ERROR,
         payload: `Error Editing Proposal Revision: ${
@@ -369,10 +351,7 @@ export const onEditProposalCurrentVersion = ({
   creator,
 }) => {
   const { messages } = appIntl();
-
   return async (dispatch) => {
-    //  dispatch({ type: FETCH_START });
-
     try {
       const response = await jwtAxios.patch(
         `business/proposal/update-version2/${proposalInfo._id}`,
@@ -467,6 +446,7 @@ export const onUpdateParagraph = ({ paragraph, conditions }) => {
   };
 };
 
+// GET USER PROPOSALS
 export const onGetUserProposals = (id) => {
   const { messages } = appIntl();
 
@@ -474,7 +454,6 @@ export const onGetUserProposals = (id) => {
     // USES UNIQUE FETCH STARt to include uniqule load when fetching client
     // to not interfere with regual loading and to add loading to contacts input
     dispatch({ type: FETCH_START, message: 'Fetching proposals...' });
-
     try {
       const response = await jwtAxios.get(
         `/business/proposal/get-user-proposals/${id}`,
@@ -483,12 +462,10 @@ export const onGetUserProposals = (id) => {
       if (response.status === 200) {
         //  STOP CONTACTS LOADING
         dispatch({ type: FETCH_SUCCESS });
-
         dispatch({
           type: GET_USER_PROPOSALS,
           payload: response.data.proposals,
         });
-        // return response.data.proposals;
       } else {
         dispatch({
           type: FETCH_ERROR,
@@ -508,9 +485,9 @@ export const onGetUserProposals = (id) => {
   };
 };
 
+// ADD PROPOSAL
 export const onAddProposal = (proposal) => {
   const { messages } = appIntl();
-
   return (dispatch) => {
     return jwtAxios
       .put(`/users/add-proposal`, { proposal })
@@ -523,10 +500,6 @@ export const onAddProposal = (proposal) => {
       })
       .catch((error) => {
         console.error('Error adding proposal', error);
-        //     dispatch({
-        //   type: FETCH_ERROR,
-        //   payload: `Error Adding Proposal to User: ${error?.response?.data?.message || error?.message || 'Something went wrong'}`
-        // });
         throw `Error Adding Proposal to User: ${
           error?.response?.data?.message ||
           error?.message ||
@@ -536,7 +509,7 @@ export const onAddProposal = (proposal) => {
   };
 };
 
-// Add Business Collaborator
+// ADD BUSINESS COLLABORATOR
 export const onAddBusinessCollaborator = ({ pid, user }) => {
   const { messages } = appIntl();
 
@@ -564,6 +537,7 @@ export const onAddBusinessCollaborator = ({ pid, user }) => {
   };
 };
 
+// ADD BUSINESS APPROVER
 export const onAddBusinessApprover = ({ pid, user }) => {
   const { messages } = appIntl();
 
@@ -589,7 +563,7 @@ export const onAddBusinessApprover = ({ pid, user }) => {
   };
 };
 
-// Add Client Collaborator
+// ADD  CLEITN COLLABORATOR
 export const onAddClientCollaborator = ({ pid, user }) => {
   const { messages } = appIntl();
 
@@ -617,9 +591,9 @@ export const onAddClientCollaborator = ({ pid, user }) => {
   };
 };
 
+// ADD CLIENT APPROVER
 export const onAddClientApprover = ({ pid, user }) => {
   const { messages } = appIntl();
-
   return (dispatch) => {
     return jwtAxios
       .patch(`/business/proposal/add-client-approver/${pid}`, { user })
@@ -642,7 +616,7 @@ export const onAddClientApprover = ({ pid, user }) => {
   };
 };
 
-// Delete Business Collaborator
+// DELETE BUSINESS COLLABORATOR
 export const onDeleteBusinessCollaborator = ({ pid, user }) => {
   const { messages } = appIntl();
 
@@ -667,6 +641,8 @@ export const onDeleteBusinessCollaborator = ({ pid, user }) => {
   };
 };
 
+
+// DELETE BUSINESS APPROVER
 export const onDeleteBusinessApprover = ({ pid, user }) => {
   const { messages } = appIntl();
 
@@ -692,10 +668,9 @@ export const onDeleteBusinessApprover = ({ pid, user }) => {
   };
 };
 
-// Delete Business Collaborator
+// DELETE CLIENT COLLABORATOR
 export const onDeleteClientCollaborator = ({ pid, user }) => {
   const { messages } = appIntl();
-
   return (dispatch) => {
     return jwtAxios
       .patch(`/business/proposal/delete-client-collaborator/${pid}`, { user })
@@ -725,9 +700,9 @@ export const onDeleteClientCollaborator = ({ pid, user }) => {
   };
 };
 
+// DELETE CLIENBT APPROVER
 export const onDeleteClientApprover = ({ pid, user }) => {
   const { messages } = appIntl();
-
   return (dispatch) => {
     return jwtAxios
       .patch(`/business/proposal/delete-client-approver/${pid}`, { user })
@@ -740,7 +715,6 @@ export const onDeleteClientApprover = ({ pid, user }) => {
       })
       .catch((error) => {
         console.error('Error deleting client Approver', error);
-
         throw `Error Deleting Client Approver: ${
           error?.response?.data?.message ||
           error?.message ||
@@ -749,3 +723,5 @@ export const onDeleteClientApprover = ({ pid, user }) => {
       });
   };
 };
+
+

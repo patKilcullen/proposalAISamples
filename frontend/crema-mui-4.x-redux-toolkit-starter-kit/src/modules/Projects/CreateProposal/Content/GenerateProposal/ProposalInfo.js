@@ -24,7 +24,7 @@ const ProposalInfo = () => {
           }}
         >
           <AppCard title='Proposal Information'>
-             <Box component='p' sx={{ fontSize: 16 }}>
+            <Box component='p' sx={{ fontSize: 16 }}>
               Title
             </Box>
             <AppTextField
@@ -37,7 +37,6 @@ const ProposalInfo = () => {
               placeholder='Title'
             />
 
-            
             <Box component='p' sx={{ mt: 3, fontSize: 16 }}>
               Scope of Work
             </Box>

@@ -16,7 +16,6 @@ const Stakeholder = (props) => {
       sx={{
         p: 2,
         mb: 3,
-        // border: "2px solid red",
         width: '100%',
       }}
       className='item-hover'

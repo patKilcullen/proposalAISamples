@@ -1,16 +1,10 @@
-import React, {useEffect} from 'react'
-
+import React, { useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import AppComponentHeader from '@crema/components/AppComponentHeader';
-import ComingSoon from 'modules/errorPages/ComingSoon'
-
-
-
+import ComingSoon from 'modules/errorPages/ComingSoon';
 
 const DashboardTour = ({ onboardingSave, setOnboardingSave, handleNext }) => {
-   
-
-// MOVE TO NEXT STEPPER
+  // MOVE TO NEXT STEPPER
   useEffect(() => {
     if (onboardingSave === true) {
       handleNext();
@@ -24,6 +18,7 @@ const DashboardTour = ({ onboardingSave, setOnboardingSave, handleNext }) => {
         title='Dashboard Tour'
         description="learn how to navigate ProposalAI's dashboard!"
       />
+      {/* INCLIUDE VIDEO WHEN READY */}
       {/* <ReactPlayer
         controls={true}
         // url='https://www.dailymotion.com/video/x5e9eog'
@@ -34,4 +29,4 @@ const DashboardTour = ({ onboardingSave, setOnboardingSave, handleNext }) => {
   );
 };
 
-export default DashboardTour
+export default DashboardTour;

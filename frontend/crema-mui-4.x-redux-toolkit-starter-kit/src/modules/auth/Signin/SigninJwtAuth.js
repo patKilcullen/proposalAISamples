@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { Checkbox, TextField } from '@mui/material';
 import { Form, Formik } from 'formik';
 import * as yup from 'yup';
-
 import AppInfoView from '@crema/components/AppInfoView';
 import { Link, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
@@ -14,34 +13,34 @@ import { useAuthMethod } from '@crema/hooks/AuthHooks';
 import { Fonts } from '@crema/constants/AppEnums';
 import AuthWrapper from '../AuthWrapper';
 
-  import GoogleAuthSignUp from '../GoogleAuth/GoogleSignUp';
+import GoogleAuthSignUp from '../GoogleAuth/GoogleSignUp';
 
 import { jwtDecode } from 'jwt-decode';
 
 const validationSchema = yup.object({
   email: yup
     .string()
-    .email(<IntlMessages id="validation.emailFormat" />)
-    .required(<IntlMessages id="validation.emailRequired" />),
+    .email(<IntlMessages id='validation.emailFormat' />)
+    .required(<IntlMessages id='validation.emailRequired' />),
   password: yup
     .string()
-    .required(<IntlMessages id="validation.passwordRequired" />),
+    .required(<IntlMessages id='validation.passwordRequired' />),
 });
-
-
 
 const SigninJwtAuth = () => {
   const navigate = useNavigate();
-  const { signInUser, signUpUserGoogle, signUpUserGoogleBack, signInUserGoogle } =
-    useAuthMethod();
+  const {
+    signInUser,
+    signUpUserGoogle,
+    signUpUserGoogleBack,
+    signInUserGoogle,
+  } = useAuthMethod();
+  const [rememberMe, setRememberMe] = useState(false);
 
-    const [rememberMe, setRememberMe] = useState(false)
-   const handleRemmberMe = ()=>{
-
-    setRememberMe(checked => !checked)
-
-   }
-
+  
+  const handleRemmberMe = () => {
+    setRememberMe((checked) => !checked);
+  };
 
   const onGoToForgetPassword = () => {
     navigate('/forget-password', { tab: 'jwtAuth' });
@@ -49,16 +48,15 @@ const SigninJwtAuth = () => {
 
   const { messages } = useIntl();
 
+  // on ggole success
   const googleSuccess = async (res) => {
     try {
-      signInUserGoogle(res, rememberMe)
+      signInUserGoogle(res, rememberMe);
     } catch (error) {
       console.log(error);
     }
   };
 
-
-// TODO: NEEDED? 
   // GET COOKIE: cookie set from backend.  When page loads,
   // see if matching cookie exists and use it for user auth
   useEffect(() => {
@@ -76,9 +74,6 @@ const SigninJwtAuth = () => {
     }
   }, []);
 
-
-
-  
   return (
     <AuthWrapper>
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -86,8 +81,6 @@ const SigninJwtAuth = () => {
           <Formik
             validateOnChange={true}
             initialValues={{
-              // email: 'turboduck@gmail.com',
-              // password: 'Throbbing1349!',
               email: '',
               password: '',
             }}
@@ -97,7 +90,7 @@ const SigninJwtAuth = () => {
               signInUser({
                 email: data.email,
                 password: data.password,
-                rememberMe: rememberMe
+                rememberMe: rememberMe,
               });
               setSubmitting(false);
             }}
@@ -132,11 +125,6 @@ const SigninJwtAuth = () => {
                         fontSize: 14,
                       },
                     }}
-                    // onChange={(e) => {
-                    //   handleChange(e);
-
-                    //   setPassword(e.target.value);
-                    // }}
                   />
                 </Box>
 
@@ -151,9 +139,12 @@ const SigninJwtAuth = () => {
                       alignItems: 'center',
                     }}
                   >
-                    <Checkbox color='primary' sx={{ ml: -3 }}
-                    checked={rememberMe}
-                    onChange={handleRemmberMe} />
+                    <Checkbox
+                      color='primary'
+                      sx={{ ml: -3 }}
+                      checked={rememberMe}
+                      onChange={handleRemmberMe}
+                    />
                     <Box
                       component='span'
                       sx={{
@@ -199,11 +190,11 @@ const SigninJwtAuth = () => {
             )}
           </Formik>
         </Box>
-        <GoogleAuthSignUp onSuccess={googleSuccess} signIn={true}/>
+        <GoogleAuthSignUp onSuccess={googleSuccess} signIn={true} />
         <Box
           sx={{
             color: 'grey.500',
-            marginTop: "10px"
+            marginTop: '10px',
           }}
         >
           <span style={{ marginRight: 4 }}>
@@ -224,10 +215,7 @@ const SigninJwtAuth = () => {
             </Link>
           </Box>
         </Box>
-        {/* FETCH CONTEXT */}
-      <AppInfoView type='context' />
-         {/* <AppInfoView /> */}
-       
+        <AppInfoView type='context' />
       </Box>
     </AuthWrapper>
   );

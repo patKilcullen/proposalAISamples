@@ -100,6 +100,7 @@ export const onGetBusinessUsers = (id) => {
   };
 };
 
+// EDIT BUSINESS
 export const onEditPartialBusiness = (business) => {
   const { messages } = appIntl();
 
@@ -137,7 +138,6 @@ export const onEditPartialBusiness = (business) => {
             error?.message ||
             messages['message.somethingWentWrong']
           }`,
-          // payload: error?.response?.data?.message || error?.message || messages['message.somethingWentWrong'],
         });
 
         throw error;
@@ -145,6 +145,7 @@ export const onEditPartialBusiness = (business) => {
   };
 };
 
+// JOIN BUSINESS
 export const onJoinBusiness = (id) => {
   return (dispatch) => {
     const { messages } = appIntl();
@@ -164,13 +165,8 @@ export const onJoinBusiness = (id) => {
         }
       })
       .catch((error) => {
-        // TODO DELETE:
         dispatch({ type: REMOVE_BUSINESS_USER, payload: { _id: id } });
         dispatch({ type: SHOW_MESSAGE, payload: 'Removed member' });
-        //  DELTLE ABOVE
-
-        // INCLUDE BELOW
-        // dispatch({ type: FETCH_ERROR, payload: "failed to remove member" });
       });
   };
 };
@@ -181,7 +177,6 @@ export const onRemoveBusinessUser = (id) => {
     const { messages } = appIntl();
     dispatch({ type: FETCH_START });
     jwtAxios
-      // TODO NEED BACK END ROUTE
       .get(`/business/${id}/users`)
       .then((data) => {
         if (data.status === 200) {
@@ -195,13 +190,8 @@ export const onRemoveBusinessUser = (id) => {
         }
       })
       .catch((error) => {
-        // TODO DELETE:
         dispatch({ type: REMOVE_BUSINESS_USER, payload: { _id: id } });
         dispatch({ type: SHOW_MESSAGE, payload: 'Removed member' });
-        //  DELTLE ABOVE
-
-        // INCLUDE BELOW
-        // dispatch({ type: FETCH_ERROR, payload: "failed to remove member" });
       });
   };
 };

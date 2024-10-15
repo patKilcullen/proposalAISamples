@@ -9,38 +9,25 @@ import { generateAndStoreOtp } from "./index.js";
 
 dotenv.config();
 
-const { AUTH_EMAIL, AUTH_PASSWORD, APP_URL, EMAIL_HOST, EMAIL_FROM } =
-  process.env;
-
-// let transporter = nodemailer.createTransport({
-//   // TODO: determine difference..
-//   // host: EMAIL_HOST,
-//   service: EMAIL_HOST,
-//   //
-//   auth: {
-//     user: AUTH_EMAIL,
-//     pass: AUTH_PASSWORD,
-//   },
-// });
+const { APP_URL, EMAIL_FROM } = process.env;
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: process.env.EMAIL_PORT,
-  // secure: true,
   auth: {
     user: process.env.EMAIL_USERNAME,
     pass: process.env.EMAIL_PASSWORD,
   },
 });
 
-
+// SEND VERIFICATION EMAIL
 export const sendVerificationEmail = async (user, res) => {
   const { _id, email, userName } = user;
 
   const token = _id + uuidv4();
 
-   const link = APP_URL + "/users/verify/" + _id + "/" + token;
- 
+  const link = APP_URL + "/users/verify/" + _id + "/" + token;
+
   //   mail options
   const mailOptions = {
     from: EMAIL_FROM,
@@ -72,19 +59,17 @@ export const sendVerificationEmail = async (user, res) => {
     const hashedToken = await hashString(token);
 
     // check if verification exists, if so, delete
-         const verficationExists = await Verification.findOne({ userId: _id });
-         if(verficationExists){
-          await Verification.deleteMany({ userId: _id });
-    
-         }
+    const verficationExists = await Verification.findOne({ userId: _id });
+    if (verficationExists) {
+      await Verification.deleteMany({ userId: _id });
+    }
 
-await Verification.create({
+    await Verification.create({
       userId: _id,
       token: hashedToken,
       createdAt: Date.now(),
       expiresAt: Date.now() + 3600000,
     });
-
 
     await transporter.sendMail(mailOptions);
     return { success: true, message: "Verification email sent successfully." };
@@ -137,6 +122,7 @@ export const sendAccountActivation = async (user, res) => {
     });
 };
 
+// RESET PASSWORD LINK
 export const resetPasswordLink = async (user, res) => {
   const { _id, email, userName } = user;
 
@@ -181,7 +167,6 @@ export const resetPasswordLink = async (user, res) => {
     });
 
     if (resetEmail) {
-      
       transporter
         .sendMail(mailOptions)
         .then(() => {
@@ -201,15 +186,16 @@ export const resetPasswordLink = async (user, res) => {
   }
 };
 
+// SEND ONE TIME PASSWORD
 export const sendOneTimePassword = async (user, res) => {
   const { _id, email, userName } = user;
-// console.log("EMAIL: ", email)
+  // console.log("EMAIL: ", email)
   try {
     const otp = await generateAndStoreOtp(_id);
     const mailOptions = {
       from: EMAIL_FROM,
-  to: "patrickjkilcullen@gmail.com",
-        // to: email,
+      to: "patrickjkilcullen@gmail.com",
+      // to: email,
       subject: "Your Proposal AI Password",
       html: `<p style="font-family: Arial, sans-serif; font-size: 16px; color: #333; background-color: #f7f7f7; padding: 20px; border-radius: 5px;">  
             Dear ${userName},
@@ -230,7 +216,7 @@ export const sendOneTimePassword = async (user, res) => {
     };
 
     if (otp) {
-     await transporter.sendMail(mailOptions);
+      await transporter.sendMail(mailOptions);
 
       return {
         success: true,
@@ -243,18 +229,16 @@ export const sendOneTimePassword = async (user, res) => {
   }
 };
 
-
-
 // SEND PROPOSAL LINK
 export const sendProposalLink = async (req, res) => {
   const { proposal, role } = req.body;
-    const token = proposal._id + uuidv4();
+  const token = proposal._id + uuidv4();
   try {
     const { clientEmail } = proposal;
     const { clientName } = proposal.metadata.clientInfo;
     const { businessName } = proposal.metadata.businessInfo;
     const url = `${process.env.APP_URL}/accept-proposal/${role}/${proposal._id}/${token}`;
-    
+
     const mailOptions = {
       from: EMAIL_FROM,
       to: clientEmail,
@@ -266,14 +250,14 @@ export const sendProposalLink = async (req, res) => {
       ProposalAI Team</p>`,
     };
 
-const hashedToken = await hashString(token);
+    const hashedToken = await hashString(token);
 
-await ProposalVerification.create({
-  proposalId: proposal._id,
-  token: hashedToken,
-  createdAt: Date.now(),
-  expiresAt: Date.now() + 3600000,
-});
+    await ProposalVerification.create({
+      proposalId: proposal._id,
+      token: hashedToken,
+      createdAt: Date.now(),
+      expiresAt: Date.now() + 3600000,
+    });
 
     const info = await transporter.sendMail(mailOptions);
 
@@ -287,14 +271,11 @@ await ProposalVerification.create({
   }
 };
 
-
-
-
 // SEND  INVITE LINK
 export const sendProposalInvite = async (req, res) => {
   const { proposal, role, clientName, clientEmail } = req.body;
 
-   const token = proposal._id + uuidv4();
+  const token = proposal._id + uuidv4();
   try {
     const { businessName } = proposal.metadata.businessInfo;
 
@@ -332,27 +313,19 @@ export const sendProposalInvite = async (req, res) => {
   }
 };
 
-
-
-
 // SEND  INVITE LINK
 export const sendSupportMessage = async (req, res) => {
-  const { message, subject} = req.body;
+  const { message, subject } = req.body;
   const user = req.user;
 
   try {
-
-
-
     const mailOptions = {
       from: EMAIL_FROM,
-       to: EMAIL_FROM,
+      to: EMAIL_FROM,
       subject: `${subject}`,
       html: `<p>${user.userName} at ${user.email} sent the following message, .<br>
     ${message}</p>`,
     };
-
-    
 
     const info = await transporter.sendMail(mailOptions);
 

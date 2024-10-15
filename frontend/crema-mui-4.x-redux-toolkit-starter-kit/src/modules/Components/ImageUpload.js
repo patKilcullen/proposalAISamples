@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import AppGrid from '@crema/components/AppGrid';
-
-
 import { UploadModern, FileRow } from './reactDropzone/components';
 
-import { Box } from '@mui/material';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 const ImgUpload = ({ uploadedFiles, setUploadedFiles }) => {
 
   const dropzone = useDropzone({
@@ -36,11 +32,6 @@ const ImgUpload = ({ uploadedFiles, setUploadedFiles }) => {
 
   return (
     <section className='container' style={{ cursor: 'pointer' }}>
-      {/* <UploadModern
-        uploadText='Drag n drop some files here, or click to select files'
-        setUploadedFiles={setUploadedFiles}
-        dropzone={dropzone}
-      /> */}
       <UploadModern
         uploadText='Drag n drop some files here, or click to select files'
         setUploadedFiles={setUploadedFiles}
@@ -60,9 +51,6 @@ const ImgUpload = ({ uploadedFiles, setUploadedFiles }) => {
               <div
                 key={index}
                 style={{
-  
-                  // minWidth: "200px",
-                  // maxWidth: "500px"\
                  width: "500px"
                 }}
               >

@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuthUser } from '@crema/hooks/AuthHooks';
-
 import AppCard from '@crema/components/AppCard';
 import MenuItem from '@mui/material/MenuItem';
-
-import {
-  Box,
-  Button,
-  Typography,
-  TextField,
-  Modal,
-} from '@mui/material';
-
+import { Box, Button, Typography, TextField, Modal } from '@mui/material';
 import AppComponentHeader from '@crema/components/AppComponentHeader';
 import { onGetUserContacts } from '../../toolkit/actions';
 import { useInfoViewActionsContext } from '@crema/context/AppContextProvider/InfoViewContextProvider';
-
 import validator from 'email-validator';
 import ExitButton from 'modules/Components/ExitButton';
 import AppInfoView from '@crema/components/AppInfoView';
@@ -65,17 +55,14 @@ export default function ReassignUserRole({
   const { user } = useAuthUser();
   const dispatch = useDispatch();
   const { fetchError } = useInfoViewActionsContext();
-
+  const [newRole, setNewRole] = useState('');
+  const [newAdminRole, setNewAdminRole] = useState('');
+  const [adminWarning, setAdminWarning] = useState(false);
 
   // GET THE BUSINESS CONTACTS
   useEffect(() => {
     dispatch(onGetUserContacts(user._id));
   }, [dispatch, user._id]);
-
-
-  const [newRole, setNewRole] = useState('');
-  const [newAdminRole, setNewAdminRole] = useState('');
-  const [adminWarning, setAdminWarning] = useState(false);
 
   const handleDenyAdmin = () => {
     setAdminWarning(false);
@@ -93,8 +80,8 @@ export default function ReassignUserRole({
     }
   };
 
-  // REASSIGN USER 
-  // delete old role then filter of bisiness or clinet then add user to appropriate array, 
+  // REASSIGN USER
+  // delete old role then filter of bisiness or clinet then add user to appropriate array,
   const reassignUser = async () => {
     deleteOldRole();
     try {

@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,17 +9,18 @@ import { useAuthUser } from '@crema/hooks/AuthHooks';
 import SendProposalContact from './SendProposalContact';
 import UpdateTextMenu from './UpdateTextMenu';
 import { useAutosave } from 'react-autosave';
-import { onAutoSave, onEditPartialProposal } from '../../../../../toolkit/actions';
+import {
+  onAutoSave,
+  onEditPartialProposal,
+} from '../../../../../toolkit/actions';
 import { autoSaveError } from 'toolkit/reducers/Proposals';
 import AppInfoView from '@crema/components/AppInfoView';
 import { getRoles } from '../../../../../utils/roleUtils';
 import { selectProposalVersions } from '../../../../../utils/proposalVersions';
 import AppsContainer from '@crema/components/AppsContainer';
 import EditProposalSideMenu from './EditProposalSideMenu';
-
 import Editor from '../../../../Components/Editor';
 import ProposalTitle from 'modules/Components/ProposalTitle';
-
 import DOMPurify from 'dompurify';
 
 const EditProposalTemplate = ({
@@ -35,19 +36,18 @@ const EditProposalTemplate = ({
   // check if proposal has data for the first time the proposal is loaded
   const { status, version } = proposal.data ? proposal.data : proposal;
   const { user } = useAuthUser();
-
   const { loading } = useSelector(({ common }) => common);
   const hasAutoSaveError = useSelector(autoSaveError);
-
   const [role, setRole] = useState('');
   const [displayRole, setDisplayRole] = useState('');
   const [roleType, setRoleType] = useState(''); //determines whether buisnes or client
-
+  const [proposalVersions, setProposalVersions] = useState([]);
+  const [textToReplace, setTextToReplace] = useState('');
+  // user role
   const memoizedRole = useMemo(
     () => getRoles(proposal, user),
     [proposal, user],
   );
-
   useEffect(() => {
     setRole(memoizedRole.role);
     setDisplayRole(memoizedRole.displayRole);
@@ -56,7 +56,6 @@ const EditProposalTemplate = ({
 
   // POPOSAL VERSIONS: all versions, using useMemo to avoid rerendering.  Depending on whether client or business
   // and the status of proposal, show all or all but last versions.  If other party(client or biz) is editing, then do not show last version
-  const [proposalVersions, setProposalVersions] = useState([]);
   useEffect(() => {
     const proposalVersionsFiltered = selectProposalVersions(
       version,
@@ -103,10 +102,8 @@ const EditProposalTemplate = ({
   }, [proposalVersions]);
 
   // Replaces the selected part of the proposal with the reposne from AI.  Does not save to DB
-  const [textToReplace, setTextToReplace] = useState('');
   const handleReplaceText = (text) => {
-
-   let sanitizedText = DOMPurify.sanitize(text)
+    let sanitizedText = DOMPurify.sanitize(text);
 
     setEditorContent(editorContent.replace(textToReplace, sanitizedText));
   };
@@ -123,7 +120,6 @@ const EditProposalTemplate = ({
   // SAVE for AUTOSAVE: IF USER IS EDITING (dependent on role and status of propsal), allow to save
   // otherwise dont allow because will cause issues
   const save = () => {
- 
     if (
       editorContent &&
       (((role === 'businessAdmin' || role === 'businessCollaborator') &&
@@ -153,10 +149,6 @@ const EditProposalTemplate = ({
   // AUTOSAVE: saves editor content after it changes
   useAutosave({ data: editorContent, onSave: save });
 
-  const editorRef = useRef(null);
-  const handlAddFocus = () =>{
-    editorRef.current.focus();
-  }
   return loading ? (
     <AppLoader />
   ) : // depending on on who(user or client) is on page and what the current proposal status is, stay on page or navigate to sent -proposal
@@ -209,25 +201,32 @@ const EditProposalTemplate = ({
             overflow: 'auto',
           }}
         >
-          <Box sx={{display: "flex", justifyContent: "space-between"}}>
-{proposal.title && <ProposalTitle title={proposal.title} id={proposal._id} role={role} />}
-{/* <Button onClick={handlAddFocus}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            {proposal.title && (
+              <ProposalTitle
+                title={proposal.title}
+                id={proposal._id}
+                role={role}
+              />
+            )}
+            {/* <Button onClick={handlAddFocus}>
       <CropFreeIcon />
     
       </Button> */}
-      </Box>
-          <Box ref={editorRef} sx={{ display: 'flex', justifyContent: 'space-between' }}></Box>
+          </Box>
+          <Box
+            ref={editorRef}
+            sx={{ display: 'flex', justifyContent: 'space-between' }}
+          ></Box>
           {/* EDITOR */}
           <Box
             sx={{
               width: '100%',
               my: 2,
             }}
-             
           >
             <Editor
-           
-               content={editorContent}
+              content={editorContent}
               onChange={handleEditorChange}
               readOnly={
                 (proposal.status !== 'draft' &&
@@ -254,7 +253,6 @@ const EditProposalTemplate = ({
         />
       }
       <AppInfoView />
-      
     </AppsContainer>
   );
 };

@@ -11,19 +11,19 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: '75vw',
-  maxHeight: '90vh', // Set a maximum height to accommodate both content and button
-  overflowY: 'auto', // Enable vertical scrolling if content exceeds maxHeight
+  maxHeight: '90vh', 
+  overflowY: 'auto',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
   display: 'flex',
-  flexDirection: 'column', // Ensure the close button is below the content
+  flexDirection: 'column', 
   alignItems: 'center',
 };
 
 const closeButtonStyle = {
-  marginTop: '16px', // Adjust the spacing as needed
+  marginTop: '16px', 
 };
 
 export default function BasicModal({ previewTemplate, selectedTemplate, setPreviewTemplate }) {
@@ -35,6 +35,7 @@ export default function BasicModal({ previewTemplate, selectedTemplate, setPrevi
     setPreviewTemplate(false);
   };
 
+  // OPEN/CLOSE
   useEffect(() => {
     previewTemplate ? handleOpen() : handleClose();
   }, [previewTemplate]);

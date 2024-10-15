@@ -22,14 +22,14 @@ const Information = () => {
       }}
     >
       <Typography
-        component="h3"
+        component='h3'
         sx={{
           fontSize: 16,
           fontWeight: Fonts.BOLD,
           mb: { xs: 3, lg: 5 },
         }}
       >
-        <IntlMessages id="common.information" />
+        <IntlMessages id='common.information' />
       </Typography>
       <Formik
         validateOnChange={false}

@@ -12,7 +12,7 @@ const UploadSignature = ({
   role,
 }) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const { user } = useAuthUser();
+
 
   //  ADD SIGNATURE  get signature from uploaded file and add to document depending on admin or client
   const addSignature = () => {

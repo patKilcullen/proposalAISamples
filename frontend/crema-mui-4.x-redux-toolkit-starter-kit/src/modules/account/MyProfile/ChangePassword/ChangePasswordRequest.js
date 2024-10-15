@@ -10,29 +10,27 @@ const ChangePasswordRequest = ({ message }) => {
   const dispatch = useDispatch();
   const { user } = useAuthUser();
   const { loading } = useSelector(({ common }) => common);
-
   const [response, setResponse] = useState('');
 
-
-
+  // SEND EMAIL
   const handleSendEmail = async () => {
+    try {
+      const res = await dispatch(
+        requestPasswordReset({
+          email: user.email,
+          userId: user._id,
+        }),
+      );
 
-  try {
-    const res = await dispatch(
-      requestPasswordReset({
-             email: user.email,
-        userId: user._id,
-      })
-    )
-  
-    setResponse(res.message);
-  } catch (error) {
-    setResponse('Failed to send password reset email. Please try again later. ERROR: ' + error);
-    console.error('Error sending password reset email:', error);
-  }
-};
-
-
+      setResponse(res.message);
+    } catch (error) {
+      setResponse(
+        'Failed to send password reset email. Please try again later. ERROR: ' +
+          error,
+      );
+      console.error('Error sending password reset email:', error);
+    }
+  };
 
   return loading ? (
     <AppLoader />

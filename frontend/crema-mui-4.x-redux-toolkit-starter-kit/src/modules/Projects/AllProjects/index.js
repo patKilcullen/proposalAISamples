@@ -17,16 +17,21 @@ import AppConfirmDialog from '@crema/components/AppConfirmDialog';
 import ProposalTable from './allProposalsTable';
 import AppInfoView from '@crema/components/AppInfoView';
 import PleaseCreateBusiness from 'modules/errorPages/PleaseCreateBusinessModal';
-
 import { getRoles } from 'utils/roleUtils';
 import { roleStatusDisplay } from 'utils/roleStatusDisplay';
+
 const AllProposals = ({ activeProjects, completedProjects }) => {
   const dispatch = useDispatch();
   const { user } = useAuthUser();
-
   const { message } = useSelector(({ common }) => common);
   const loading = useSelector(({ common }) => common.loading);
   const proposals = useSelector(({ proposals }) => proposals.proposals);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
+  const [filterText, setFilterText] = useState('');
+  const [alignment, setAlignment] = useState(
+    completedProjects ? 'signed' : 'all',
+  );
 
   // GET ALL BUSINESS PROPOSALS on dispatch and when businessID changes
   useEffect(() => {
@@ -34,9 +39,6 @@ const AllProposals = ({ activeProjects, completedProjects }) => {
       dispatch(onGetUserProposals(user._id));
     }
   }, [dispatch, user?._id]);
-
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [deleteId, setDeleteId] = useState('');
 
   // DELETE PROPOSAL, first setConfirm deletes to display confirmation box and set ID of proposal to be delted
   const handleDeleteProposal = (id) => {
@@ -55,16 +57,10 @@ const AllProposals = ({ activeProjects, completedProjects }) => {
   // ALIGNMENT, set the toggle bar for proposal status and hable changes
   // if completedProjects is true, set to signed
   // if event, handling in-review dropdown, if setAlignmnet, handling main toggle menu
-  const [alignment, setAlignment] = useState(
-    completedProjects ? 'signed' : 'all',
-  );
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment ? newAlignment : event);
     filterProposals(newAlignment ? newAlignment : event);
   };
-
-  // FILTER TEXT
-  const [filterText, setFilterText] = useState('');
 
   //FILTERED PROPOSALS: when proposals change setFilteredProposals(for first render)
   // then sets alignment and filtere proposals for actions like delete
@@ -155,8 +151,8 @@ const AllProposals = ({ activeProjects, completedProjects }) => {
         ? proposal.status === 'returned' ||
           proposal.status === 'returned-revision'
         : alignment === 'all' && activeProjects
-        ? proposal.status !== 'signed' || proposal.status === 'rejected'
-        : proposal.status === alignment,
+          ? proposal.status !== 'signed' || proposal.status === 'rejected'
+          : proposal.status === alignment,
     );
     setFilteredProposals(
       alignment === 'all' && !activeProjects ? proposals : currentProposals,
@@ -166,7 +162,7 @@ const AllProposals = ({ activeProjects, completedProjects }) => {
     setFilteredProposals((filteredProposals) =>
       filteredProposals.filter(
         (proposal) =>
-        proposal.title?.toLowerCase().includes(searchText) ||
+          proposal.title?.toLowerCase().includes(searchText) ||
           proposal.status.toLowerCase().includes(searchText) ||
           proposal.clientName?.toLowerCase().includes(searchText) ||
           proposal.clientId?.userName.toLowerCase().includes(searchText) ||
@@ -229,7 +225,7 @@ const AllProposals = ({ activeProjects, completedProjects }) => {
       }
     }
 
-  if (type === 'title') {
+    if (type === 'title') {
       if (orderType.title) {
         tempProps.sort((a, b) => {
           if (a.title === undefined && b.title === undefined) {

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {Button, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { Checkbox } from '@mui/material';
 import { Form, Formik } from 'formik';
 import * as yup from 'yup';
-
 import AppInfoView from '@crema/components/AppInfoView';
 import Box from '@mui/material/Box';
 import IntlMessages from '@crema/helpers/IntlMessages';
@@ -13,58 +12,52 @@ import { useAuthMethod, useAuthUser } from '@crema/hooks/AuthHooks';
 import { Fonts } from '@crema/constants/AppEnums';
 import { Link } from 'react-router-dom';
 import AuthWrapper from '../AuthWrapper';
-
 import GoogleAuthSignUp from '../GoogleAuth/GoogleSignUp';
 import PasswordChecklist from 'react-password-checklist';
 
 const validationSchema = yup.object({
-  name: yup.string().required(<IntlMessages id="validation.nameRequired" />),
+  name: yup.string().required(<IntlMessages id='validation.nameRequired' />),
   email: yup
     .string()
-    .email(<IntlMessages id="validation.emailFormat" />)
-    .required(<IntlMessages id="validation.emailRequired" />),
+    .email(<IntlMessages id='validation.emailFormat' />)
+    .required(<IntlMessages id='validation.emailRequired' />),
   password: yup
     .string()
-    .required(<IntlMessages id="validation.passwordRequired" />),
+    .required(<IntlMessages id='validation.passwordRequired' />),
 });
 
 const SignupJwtAuth = () => {
   const { signUpClient, signUpClientGoogle, signUpUserRole } = useAuthMethod();
-const navigate = useNavigate()
+  const navigate = useNavigate();
   const { pid, role, token } = useParams();
- const { user } = useAuthUser();
- const [agreeToTermsAndPolicy, setAgreeToTermsAndPolicy] = useState(false);
-
+  const { user } = useAuthUser();
+  const [agreeToTermsAndPolicy, setAgreeToTermsAndPolicy] = useState(false);
   const [password, setPassword] = useState('');
   const [confrimPassword, setConfrimPassword] = useState('');
   const [showErrors, setShowErrors] = useState(false);
 
-//  If user is logged in, navigate to accept proposal page
- useEffect(()=>{
-
-if(user){
-navigate(`/accept-proposal/${role}/${pid}/${token}`)
-}
- },[])
-
+  //  If user is logged in, navigate to accept proposal page
+  useEffect(() => {
+    if (user) {
+      navigate(`/accept-proposal/${role}/${pid}/${token}`);
+    }
+  }, []);
 
   // google auth success:
   const googleSuccess = (res) => {
-try{
-    signUpClientGoogle({
-      token: res.tokenId,
-      email: res.profileObj.email,
-      name: res.profileObj.name,
-      googleId: res.profileObj.googleId,
-      proposalId: pid,
-    });
-  }catch(error){
-    console.log(error);
-  }
+    try {
+      signUpClientGoogle({
+        token: res.tokenId,
+        email: res.profileObj.email,
+        name: res.profileObj.name,
+        googleId: res.profileObj.googleId,
+        proposalId: pid,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
- 
 
- 
   return (
     <AuthWrapper>
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -87,7 +80,7 @@ try{
                 proposalId: pid,
                 role: role,
                 businessId: null,
-                token: token
+                token: token,
               });
               setSubmitting(false);
             }}
@@ -316,9 +309,9 @@ try{
           </Box>
         </Box>
 
-            {/* FETCH CONTEXT */}
-      <AppInfoView type='context' />
-         {/* <AppInfoView /> */}
+        {/* FETCH CONTEXT */}
+        <AppInfoView type='context' />
+        {/* <AppInfoView /> */}
       </Box>
     </AuthWrapper>
   );

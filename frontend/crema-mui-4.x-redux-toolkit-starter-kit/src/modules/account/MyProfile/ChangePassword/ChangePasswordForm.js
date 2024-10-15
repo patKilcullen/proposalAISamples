@@ -9,15 +9,10 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Form } from 'formik';
 import AppTextField from '@crema/components/AppFormComponents/AppTextField';
 
-
 const ChangePasswordForm = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
-
   const [showNewPassword, setShowNewPassword] = React.useState(false);
   const [showRetypeNewPassword, setShowRetypeNewPassword] =
     React.useState(false);
-
-
 
   const onShowNewPassword = () => {
     setShowNewPassword(!showNewPassword);
@@ -36,48 +31,48 @@ const ChangePasswordForm = () => {
   };
 
   return (
-    <Form autoComplete="off">
+    <Form autoComplete='off'>
       <AppGridContainer spacing={4}>
         <Grid item xs={12} md={6}>
           <AppTextField
             type={showNewPassword ? 'text' : 'password'}
-            name="newPassword"
+            name='newPassword'
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end">
+                <InputAdornment position='end'>
                   <IconButton
-                    aria-label="toggle password visibility"
+                    aria-label='toggle password visibility'
                     onClick={onShowNewPassword}
                     onMouseDown={onDownNewPassword}
-                    edge="end"
+                    edge='end'
                   >
                     {showNewPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
             }}
-            label={<IntlMessages id="common.newPassword" />}
+            label={<IntlMessages id='common.newPassword' />}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <AppTextField
             type={showRetypeNewPassword ? 'text' : 'password'}
-            name="retypeNewPassword"
+            name='retypeNewPassword'
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end">
+                <InputAdornment position='end'>
                   <IconButton
-                    aria-label="toggle password visibility"
+                    aria-label='toggle password visibility'
                     onClick={onShowRetypeNewPassword}
                     onMouseDown={onDownRetypeNewPassword}
-                    edge="end"
+                    edge='end'
                   >
                     {showRetypeNewPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
             }}
-            label={<IntlMessages id="common.retypeNewPassword" />}
+            label={<IntlMessages id='common.retypeNewPassword' />}
           />
         </Grid>
         <Grid item xs={12} md={12}>
@@ -92,11 +87,11 @@ const ChangePasswordForm = () => {
                 position: 'relative',
                 minWidth: 100,
               }}
-              color="primary"
-              variant="contained"
-              type="submit"
+              color='primary'
+              variant='contained'
+              type='submit'
             >
-              <IntlMessages id="common.saveChanges" />
+              <IntlMessages id='common.saveChanges' />
             </Button>
             <Button
               sx={{
@@ -104,10 +99,10 @@ const ChangePasswordForm = () => {
                 minWidth: 100,
                 ml: 2.5,
               }}
-              color="primary"
-              variant="outlined"
+              color='primary'
+              variant='outlined'
             >
-              <IntlMessages id="common.cancel" />
+              <IntlMessages id='common.cancel' />
             </Button>
           </Box>
         </Grid>

@@ -10,14 +10,18 @@ import AppAnimate from '@crema/components/AppAnimate';
 import { Box } from '@mui/material';
 import AppLoader from '@crema/components/AppLoader';
 import AppTextField from '@crema/components/AppFormComponents/AppTextField';
-import { onEditPartialBusiness, onCreateBusiness, onGetBusinessInfo } from '../../../../toolkit/actions';
+import {
+  onEditPartialBusiness,
+  onCreateBusiness,
+  onGetBusinessInfo,
+} from '../../../../toolkit/actions';
 import IntlMessages from '@crema/helpers/IntlMessages';
 import AppComponentHeader from '@crema/components/AppComponentHeader';
 import UploadLogo from 'modules/Components/reactDropzone/UploadLogo';
-import IndustrySelection from './IndustrySelection'
+import IndustrySelection from './IndustrySelection';
 import { useJWTAuthActions } from '@crema/services/auth/jwt-auth/JWTAuthProvider';
 import Avatar from '@mui/material/Avatar';
-import FormHelperText from '@mui/material/FormHelperText'
+import FormHelperText from '@mui/material/FormHelperText';
 const validationSchema = yup.object({
   businessName: yup.string().required('Business Name Required'),
   businessEmail: yup
@@ -47,7 +51,6 @@ const BusinessSetup = (
     setFormError,
     setFormErrors,
     setActiveStep,
-
   },
   ref,
 ) => {
@@ -58,7 +61,7 @@ const BusinessSetup = (
   const { loading, hideMessage } = useSelector(({ common }) => common);
   const [selectedIndustry, setSelectedIndustry] = useState(null);
 
- const { getAuthUser } = useJWTAuthActions();
+  const { getAuthUser } = useJWTAuthActions();
 
   // ERROR MESSAGE HELPER for industry because Crema AppSelectFrield doesnt work wi "other" dropdown
   // and regualr Select needs ErrorMessage component
@@ -81,21 +84,18 @@ const BusinessSetup = (
       !business?.address &&
       !business?.taxId &&
       !business?.industry &&
-          !business?.businessRepName &&
-          !business?.businessRepRole &&
-          !business?.businessRepEmail 
+      !business?.businessRepName &&
+      !business?.businessRepRole &&
+      !business?.businessRepEmail
     ) {
       formikRef.current.setErrors({
-        // ~
         businessName: 'Business Name Required',
         businessEmail: 'Business Email Required',
-        // ~
         businessOverview: 'Overview Required',
         businessType: 'Business Type Required',
         services: 'Services Required',
         businessURL: 'URL Required',
         businessAddress: 'Address Required',
-        // taxId: 'Tax Id Required',
         industry: 'Industry Required',
         businessRepName: 'Business Representative Name Required',
         businessRepRole: 'Business Representative Role Required',
@@ -104,23 +104,20 @@ const BusinessSetup = (
     }
   }, []);
 
+  const [businessLogo, setBusinessLogo] = useState(null);
+  const [businessLogoEncoded, setBusinessLogoEncoded] = useState(null);
 
   // BUSINESS LOGO: if logo included, encode it before saving
-   const [businessLogo, setBusinessLogo] = useState(null);
-const [businessLogoEncoded, setBusinessLogoEncoded] = useState(null)
- 
-  useEffect(()=>{
-    if(businessLogo?.length > 0){
-handleFileChange(businessLogo)
+  useEffect(() => {
+    if (businessLogo?.length > 0) {
+      handleFileChange(businessLogo);
     }
-  },[businessLogo])
+  }, [businessLogo]);
 
-   const handleFileChange = (logo) => {
-  
-     const file = logo[0];
+  const handleFileChange = (logo) => {
+    const file = logo[0];
     if (file) {
-      // Convert the file to a base64 string
-      const reader = new FileReader();
+      const reader = new FileReader(); // Convert the file to a base64 string
       reader.onloadend = () => {
         setBusinessLogoEncoded(reader.result); // Set the base64 string
       };
@@ -128,34 +125,25 @@ handleFileChange(businessLogo)
     }
   };
 
-
- 
-
-    useEffect(() => {
+  // SUBMIT FORM when onboardingSave is true
+  useEffect(() => {
     const handleFormSubmission = async () => {
-   
       if (onboardingSave === true) {
         const errors = await formikRef.current.validateForm();
- await formikRef.current.submitForm();
+        await formikRef.current.submitForm();
         // IF industry is other and field empty, throw errr
         if (
           formikRef.current.values.industry === 'other' &&
           formikRef.current.values.customIndustry === null
         ) {
-        //  setFormErrors([]);
           setFormError(true);
-          // setFormErrors([...Object.values(errors), 'Industry Required']);
-
         } else {
           if (Object.keys(errors).length === 0) {
             await formikRef.current.submitForm();
             handleNext();
             setFormError(false);
-            // setFormErrors([]);
           } else {
-                // setFormErrors([]);
             setFormError(true);
-            // setFormErrors(Object.values(errors));
           }
         }
       }
@@ -165,88 +153,75 @@ handleFileChange(businessLogo)
     handleFormSubmission();
   }, [onboardingSave]);
 
-
- 
-
   const onEditBusiness = async (
     values,
     { setSubmitting, submitForm, setFieldValue },
   ) => {
     setSubmitting(true);
-
+    // if user has no business, create business, otherwith edit business
     try {
-//  ROLE IN PROPOSAL
-if(!user.businessId){
-  try{
-
-      await dispatch(
-        onCreateBusiness({
-          email: values.businessEmail,
-          businessName: values.businessName,
-          address: values.businessAddress,
-          businessOverview: values.businessOverview,
-          businessType: values.businessType,
-          url: values.businessUrl,
-          businessServices: values.services,
-          userId: user._id,
-          _id: user.businessId?._id,
-          industry:
-            values.industry === 'other'
-              ? values.customIndustry
-              : values.industry,
-          businessRepName: values.businessRepName,
-          businessRepRole: values.businessRepRole,
-          businessRepEmail: values.businessRepEmail,
-          logo: businessLogoEncoded || null,
-          tin: values.tin,
-        }),
-      )
-
-  }catch(error){
-    // If error creating business, dont move onto next step
-  setActiveStep(prev => prev -1)
-  throw error
-  }
-      
-      
-      ;}else{
- 
-      await dispatch(
-        onEditPartialBusiness({
-          email: values.businessEmail,
-          businessName: values.businessName,
-          address: values.businessAddress,
-          businessOverview: values.businessOverview,
-          businessType: values.businessType,
-          url: values.businessUrl,
-          businessServices: values.services,
-          userId: user._id,
-          _id: user.businessId?._id,
-          industry:
-            values.industry === 'other'
-              ? values.customIndustry
-              : values.industry,
-          businessRepName: values.businessRepName,
-          businessRepRole: values.businessRepRole,
-          businessRepEmail: values.businessRepEmail,
-          logo: businessLogoEncoded || null,
-          tin: values.tin || null,
-        }),
-      );
+      if (!user.businessId) {
+        try {
+          // CREATE BIZ
+          await dispatch(
+            onCreateBusiness({
+              email: values.businessEmail,
+              businessName: values.businessName,
+              address: values.businessAddress,
+              businessOverview: values.businessOverview,
+              businessType: values.businessType,
+              url: values.businessUrl,
+              businessServices: values.services,
+              userId: user._id,
+              _id: user.businessId?._id,
+              industry:
+                values.industry === 'other'
+                  ? values.customIndustry
+                  : values.industry,
+              businessRepName: values.businessRepName,
+              businessRepRole: values.businessRepRole,
+              businessRepEmail: values.businessRepEmail,
+              logo: businessLogoEncoded || null,
+              tin: values.tin,
+            }),
+          );
+        } catch (error) {
+          // If error creating business, dont move onto next step
+          setActiveStep((prev) => prev - 1);
+          throw error;
+        }
+      } else {
+        // EDIT BIZ
+        await dispatch(
+          onEditPartialBusiness({
+            email: values.businessEmail,
+            businessName: values.businessName,
+            address: values.businessAddress,
+            businessOverview: values.businessOverview,
+            businessType: values.businessType,
+            url: values.businessUrl,
+            businessServices: values.services,
+            userId: user._id,
+            _id: user.businessId?._id,
+            industry:
+              values.industry === 'other'
+                ? values.customIndustry
+                : values.industry,
+            businessRepName: values.businessRepName,
+            businessRepRole: values.businessRepRole,
+            businessRepEmail: values.businessRepEmail,
+            logo: businessLogoEncoded || null,
+            tin: values.tin || null,
+          }),
+        );
       }
-      //  hideMessage();
     } catch (error) {
-
       console.error('Error during onSubmit:', error);
     } finally {
-      getAuthUser()
+      getAuthUser();
       setSubmitting(false);
     }
   };
-
-
-
-
 
   return (
     <div>
@@ -258,10 +233,11 @@ if(!user.businessId){
             title='Profile Setup'
             description='enter your basic business information...'
           />
-        
+
           <Formik
             validateOnBlur={true}
-            validateOnChange={true}   
+            validateOnChange={true}
+            // INITIAL VALUES
             initialValues={{
               businessEmail: user?.businessId?.email
                 ? user?.businessId?.email
@@ -270,7 +246,9 @@ if(!user.businessId){
                 ? user?.businessId?.businessName
                 : null,
               businessAddress: business?.address ? business?.address : null,
-              services: business?.businessServices ? business?.businessServices : null,
+              services: business?.businessServices
+                ? business?.businessServices
+                : null,
               businessOverview: business?.businessOverview
                 ? business?.businessOverview
                 : null,
@@ -292,21 +270,17 @@ if(!user.businessId){
               businessRepEmail: business?.businessRepEmail
                 ? business?.businessRepEmail
                 : null,
-                 tin: business?.tin
-                ? business?.tin
-                : null,
+              tin: business?.tin ? business?.tin : null,
             }}
             validationSchema={validationSchema}
             onSubmit={onEditBusiness}
             innerRef={formikRef}
           >
             <AppAnimate animation='transition.slideUpIn'>
-              <Form noValidate autoComplete='off'
-          
-              >
+              <Form noValidate autoComplete='off'>
                 <AppCard>
                   {/* ~ */}
-                  <Box component='p' sx={{ fontSize: 16 ,}}>
+                  <Box component='p' sx={{ fontSize: 16 }}>
                     Business Name
                   </Box>
                   <AppTextField
@@ -317,10 +291,8 @@ if(!user.businessId){
                       my: 2,
                     }}
                     placeholder='business name'
-                    // value={businessInfo ? businessInfo.services : null}
-                    // onChange={(e) => setFieldValue('services', e.target.value)}
                   />
-  
+
                   <Box component='p' sx={{ fontSize: 16 }}>
                     Business Email
                   </Box>
@@ -332,8 +304,6 @@ if(!user.businessId){
                       my: 2,
                     }}
                     placeholder='business email'
-                    // value={businessInfo ? businessInfo.services : null}
-                    // onChange={(e) => setFieldValue('services', e.target.value)}
                   />
                   {/* ~ */}
                   <Box component='p' sx={{ fontSize: 16 }}>
@@ -356,40 +326,38 @@ if(!user.businessId){
                       );
                     }}
                   >
-                       <MenuItem value='Sole Proprietorship'>
-                Sole Proprietorship
-              </MenuItem>
-              <MenuItem value='Partnership (General Partnership or Limited Partnership)'>
-                Partnership (General Partnership or Limited Partnership)
-              </MenuItem>
+                    <MenuItem value='Sole Proprietorship'>
+                      Sole Proprietorship
+                    </MenuItem>
+                    <MenuItem value='Partnership (General Partnership or Limited Partnership)'>
+                      Partnership (General Partnership or Limited Partnership)
+                    </MenuItem>
 
-              <MenuItem value='Limited Liability Company (LLC)'>
-                Limited Liability Company (LLC)
-              </MenuItem>
-              <MenuItem value='Corporation (C-Corporation or S-Corporation)'>
-                Corporation (C-Corporation or S-Corporation)
-              </MenuItem>
+                    <MenuItem value='Limited Liability Company (LLC)'>
+                      Limited Liability Company (LLC)
+                    </MenuItem>
+                    <MenuItem value='Corporation (C-Corporation or S-Corporation)'>
+                      Corporation (C-Corporation or S-Corporation)
+                    </MenuItem>
 
-              <MenuItem value='Nonprofit Corporation'>
-                Nonprofit Corporation
-              </MenuItem>
-              <MenuItem value='Cooperative'>Cooperative</MenuItem>
+                    <MenuItem value='Nonprofit Corporation'>
+                      Nonprofit Corporation
+                    </MenuItem>
+                    <MenuItem value='Cooperative'>Cooperative</MenuItem>
 
-              <MenuItem value='Professional Corporation (PC)'>
-                Professional Corporation (PC)
-              </MenuItem>
-              <MenuItem value='Benefit Corporation'>
-                Benefit Corporation
-              </MenuItem>
-            </Select>
-        <Box sx={{ mt:-2, ml: 4}}> 
- <ErrorMessage 
-              name={
-                'businessType'
-              }
-              component={errorHelper}
-            /></Box>
-
+                    <MenuItem value='Professional Corporation (PC)'>
+                      Professional Corporation (PC)
+                    </MenuItem>
+                    <MenuItem value='Benefit Corporation'>
+                      Benefit Corporation
+                    </MenuItem>
+                  </Select>
+                  <Box sx={{ mt: -2, ml: 4 }}>
+                    <ErrorMessage
+                      name={'businessType'}
+                      component={errorHelper}
+                    />
+                  </Box>
 
                   <IndustrySelection
                     onboardingSave={onboardingSave}
@@ -401,13 +369,9 @@ if(!user.businessId){
                     formikRef={formikRef}
                   />
 
-             <Box sx={{ ml: 4}}> 
- <ErrorMessage 
-              name={
-                'industry'
-              }
-              component={errorHelper}
-            /></Box>
+                  <Box sx={{ ml: 4 }}>
+                    <ErrorMessage name={'industry'} component={errorHelper} />
+                  </Box>
                   <Box component='p' sx={{ mt: 3, fontSize: 16 }}>
                     Overview
                   </Box>
@@ -508,16 +472,6 @@ if(!user.businessId){
                           my: 2,
                         }}
                         placeholder='Rep Name'
-                        // value={businessInfo ? businessInfo.url : ''}
-                        // onChange={(e) =>
-                        //   setFieldValue(
-                        //     clientBusiness
-                        //       ? 'clientRepName'
-                        //       : 'businessRepName',
-                        //     e.target.value,
-                        //   )
-                        // }
-                        // disabled={businessInfo && !editMode}
                       />
                     </Box>
                     <Box>
@@ -532,16 +486,6 @@ if(!user.businessId){
                           my: 2,
                         }}
                         placeholder='Rep Role'
-                        // value={businessInfo ? businessInfo.url : ''}
-                        // onChange={(e) =>
-                        //   setFieldValue(
-                        //     clientBusiness
-                        //       ? 'clientRepRole'
-                        //       : 'businessRepRole',
-                        //     e.target.value,
-                        //   )
-                        // }
-                        // disabled={businessInfo && !editMode}
                       />
                     </Box>
                     <Box>
@@ -556,59 +500,41 @@ if(!user.businessId){
                           my: 2,
                         }}
                         placeholder='Rep Email'
-                        // value={businessInfo ? businessInfo.url : ''}
-                        // onChange={(e) =>
-                        //   setFieldValue(
-                        //     clientBusiness
-                        //       ? 'clientRepEmail'
-                        //       : 'businessRepEmail',
-                        //     e.target.value,
-                        //   )
-                        // }
-                        // disabled={businessInfo && !editMode}
                       />
                     </Box>
                   </Box>
                 </AppCard>
               </Form>
             </AppAnimate>
-   
           </Formik>
-                
         </>
       )}
- {business && business.logo && (
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    position: 'relative',
-                    my: 5
-                  }}
-                >
-                  <Box component='p' sx={{ fontSize: 16 }}>
-                    Logo
-                  </Box>
-                  <Box
-                    sx={{
-                      // display: 'flex',
-                      // justifyContent: 'center',
-                      // flexGrow: 1,
-                    }}
-                  >
-                    <Avatar
-                      sx={{
-                        width: 100,
-                        height: 100,
-                        mb: 2.5,
-                        alignSelf: 'center',
-                      }}
-                      src={`${process.env.REACT_APP_SERVER_URL}${business.logo}`}
-                    />
-                  </Box>
-                </Box>
-              )}
+      {business && business.logo && (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            position: 'relative',
+            my: 5,
+          }}
+        >
+          <Box component='p' sx={{ fontSize: 16 }}>
+            Logo
+          </Box>
+          <Box>
+            <Avatar
+              sx={{
+                width: 100,
+                height: 100,
+                mb: 2.5,
+                alignSelf: 'center',
+              }}
+              src={`${process.env.REACT_APP_SERVER_URL}${business.logo}`}
+            />
+          </Box>
+        </Box>
+      )}
       <Box component='p' sx={{ fontSize: 16, marginTop: '15px' }}>
         Upload Business Logo (optional):
       </Box>

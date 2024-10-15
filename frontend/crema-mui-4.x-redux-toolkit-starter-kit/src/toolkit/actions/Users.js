@@ -5,7 +5,7 @@ import {
   GET_SINGLE_USER,
   CREATE_USER,
   SHOW_MESSAGE,
-  ADD_PROPOSAL
+  ADD_PROPOSAL,
 } from '@crema/constants/ActionTypes';
 import { appIntl } from '@crema/helpers/Common';
 import jwtAxios from '@crema/services/auth/jwt-auth';
@@ -13,14 +13,11 @@ import jwtAxios from '@crema/services/auth/jwt-auth';
 // GET USER - user for user of application
 export const onGetUser = (id) => {
   return (dispatch) => {
-
     const { messages } = appIntl();
     dispatch({ type: FETCH_START });
-
     jwtAxios
       .get(`/users/get/${id}`)
       .then((data) => {
-       
         if (data.status === 200) {
           dispatch({ type: FETCH_SUCCESS });
           dispatch({ type: GET_SINGLE_USER, payload: data.data });
@@ -33,42 +30,34 @@ export const onGetUser = (id) => {
       })
       .catch((error) => {
         dispatch({ type: FETCH_ERROR, payload: error.message });
-
       });
   };
 };
-
 
 // GET BUSINESS/ BUSINESS INFO
 export const onGetOtherUser = (id) => {
   return (dispatch) => {
     const { messages } = appIntl();
-    // dispatch({ type: FETCH_START });
-  
     return jwtAxios
       .get(`/users/get/${id}`)
       .then((data) => {
-     
         if (data.status === 200) {
-          // dispatch({ type: FETCH_SUCCESS });
- return data
+          return data;
         } else {
           dispatch({
             type: FETCH_ERROR,
             payload: messages['message.somethingWentWrong'],
           });
-     
         }
       })
       .catch((error) => {
-
         dispatch({ type: FETCH_ERROR, payload: error.message });
       });
   };
 };
 
+// CREATE NEW USER
 export const onCreateUser = (user) => {
-  
   return (dispatch) => {
     const { messages } = appIntl();
     dispatch({ type: FETCH_START });
@@ -100,14 +89,13 @@ export const onCreateUser = (user) => {
   };
 };
 
+// UPDATE USER
 export const onUpdateUser = (user) => {
   const { messages } = appIntl();
   return (dispatch) => {
-    
     return jwtAxios
       .put(`users/update-user/${user._id}`, user)
       .then((data) => {
-        
         if (data.status === 200) {
           dispatch({ type: FETCH_SUCCESS });
           dispatch({
@@ -127,16 +115,15 @@ export const onUpdateUser = (user) => {
       .catch((error) => {
         dispatch({
           type: FETCH_ERROR,
-          payload: `Error Updating User" ${error?.response?.data?.message || error?.message || "Something went wrong"}` 
+          payload: `Error Updating User" ${error?.response?.data?.message || error?.message || 'Something went wrong'}`,
         });
         // return null;
-           throw error
+        throw error;
       });
   };
 };
 
-
-
+// VERIFY EMAIL
 export const onVerifyUserEmail = ({ id, token }) => {
   return (dispatch) => {
     const { messages } = appIntl();
@@ -145,24 +132,20 @@ export const onVerifyUserEmail = ({ id, token }) => {
     return jwtAxios
       .get(`/users/verify/${id}/${token}`)
       .then((data) => {
- 
         if (data.status === 200) {
-          dispatch({ type: FETCH_SUCCESS, message: "Email verified" });
+          dispatch({ type: FETCH_SUCCESS, message: 'Email verified' });
           // return data so that dispatch function navigates to home page if verified
-          return data; 
+          return data;
         } else {
-   
-             dispatch({ type: FETCH_ERROR, payload: "Failed to verify email"});
+          dispatch({ type: FETCH_ERROR, payload: 'Failed to verify email' });
         }
       })
       .catch((error) => {
-        // dispatch({ type: FETCH_ERROR, payload: error.response.data.message });
-        dispatch({type: FETCH_ERROR,payload:  `Error Verifying Email: ${error?.response?.data?.message || error?.message || 'Something went wrong'}`})
-      //  throw `Error Verifying EMail: ${error?.response?.data?.message || error?.message || 'Something went wrong'}`
-    throw `Error Verifying Email: ${error?.response?.data?.message || error?.message || 'Something went wrong'}`
-    });
-     
+        dispatch({
+          type: FETCH_ERROR,
+          payload: `Error Verifying Email: ${error?.response?.data?.message || error?.message || 'Something went wrong'}`,
+        });
+        throw `Error Verifying Email: ${error?.response?.data?.message || error?.message || 'Something went wrong'}`;
+      });
   };
 };
-
-

@@ -10,7 +10,6 @@ import {
   fetchError,
   onEditPartialProposal
 } from 'toolkit/actions';
-
 import { removeProposal } from '../../../toolkit/reducers/Proposals';
 import ReactHtmlParser from 'react-html-parser';
 import AppLoader from '@crema/components/AppLoader';
@@ -29,6 +28,7 @@ import AppGridContainer from '@crema/components/AppGridContainer';
 import SentProposalSideMenu from './SentProposalSideMenu';
 import ProposalTitle from 'modules/Components/ProposalTitle';
 import {handleAddClientSignatureHTML, handleAddBusinessSignatureHTML} from './SignatureHTML'
+
 const SentProposal = () => {
   const { user } = useAuthUser();
   const { pid } = useParams();
@@ -38,13 +38,12 @@ const SentProposal = () => {
   const proposal = useSelector(({ proposals }) => proposals.proposal);
   const contentRef = useRef(null);
   const { version } = proposal || {};
-
   const [role, setRole] = useState('');
   const [displayRole, setDisplayRole] = useState('');
   const [roleType, setRoleType] = useState(''); //determines whether buisnes or client
 
 
-
+// USER ROLE
   const memoizedRole = useMemo(
     () => getRoles(proposal, user),
     [proposal, user],
@@ -55,6 +54,7 @@ const SentProposal = () => {
     setDisplayRole(memoizedRole.displayRole);
     setRoleType(memoizedRole.roleType);
   }, [memoizedRole]);
+
 
   // POPOSAL VERSIONS: all versions, using useMemo to avoid rerendering.  Depending on whether client or business
   // and the status of proposal, show all or all but last versions.  If other party(client or biz) is editing, then do not show last version
@@ -131,9 +131,6 @@ const SentProposal = () => {
                 signature: htmlContent,
                 clientEmail: proposal?.clientId?.email,
                 businessEmail: proposal?.businessId.email,
-                // TEST
-                // clientEmail: 'patrickjkilcullen@gmail.com',
-                // businessEmail: 'patrickjkilcullen@gmail.com',
                 content: htmlContent,
                 fileName: proposal._id,
               }),
@@ -246,76 +243,14 @@ const SentProposal = () => {
   // BUSINESS SIGNATURE
   const handleAddBusinessSignature = ({signature, type}) => {
     resetSignature();
-    // const date = new Date();
-    // const formattedDate = formatDate(date);
-    // let sanitizedSignature = DOMPurify.sanitize(signature);
      let html = handleAddBusinessSignatureHTML({signature, type, user})
     setProposalVersion((prevVersion) => {
       return (
          prevVersion + html
-        // `
-        //     <div style="display: flex; align-items: center">
-        //         <!-- Label for client signature -->
-        //         <label>Client Signature:</label>
-        //         <div style="display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start;">
-        //         <img style="height: 50px; margin-left: -5%; margin-bottom: -20px; transform: scale(0.5); transform-origin: center;" src=${sanitizedSignature} />
-        //             <div style="
-        //                 border-bottom: 1px solid black;
-        //                 width: 100px;
-        //                 margin-left: 10px;
-        //                 position: relative;
-        //                 margin-top: 15px;
-        //                 margin-bottom: -20px
-        //             "></div>
-        //             <div style="margin-top: 10px; display: flex; flex-direction: row; gap: 7px">
-        //                 <div style="margin-top: 5px;">
-        //                     <label style="margin-right: 5px;">Name:</label>
-        //                     <span>${user.userName}</span>
-        //                 </div>
-        //                 <div style="margin-top: 5px;">
-        //                     <label style="margin-right: 5px;">Email:</label>
-        //                     <span>${user.email}</span>
-        //                 </div>
-        //                 <div style="margin-top: 5px;">
-        //                     <label style="margin-right: 5px;">Date:</label>
-        //                     <span>${formattedDate}</span>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </div>`
       );
     });
   };
-    // `
-    //         <div style="display: flex; align-items: center">
-    //             <!-- Label for client signature -->
-    //             <label>Client Signature:</label>
-    //             <div style="display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start;">
-    //             <img style="height: 50px; margin-left: -15%; margin-bottom: -20px; transform: scale(0.5); transform-origin: center;" src=${sanitizedSignature} />
-    //                 <div style="
-    //                     border-bottom: 1px solid black;
-    //                     width: 100px;
-    //                     margin-left: 10px;
-    //                     position: relative;
-    //                     margin-top: 15px;
-    //                 "></div>
-    //                 <div style="margin-top: 10px; display: flex; flex-direction: row; gap: 7px">
-    //                     <div style="margin-top: 5px;">
-    //                         <label style="margin-right: 5px;">Name:</label>
-    //                         <span>${user.userName}</span>
-    //                     </div>
-    //                     <div style="margin-top: 5px;">
-    //                         <label style="margin-right: 5px;">Email:</label>
-    //                         <span>${user.email}</span>
-    //                     </div>
-    //                     <div style="margin-top: 5px;">
-    //                         <label style="margin-right: 5px;">Date:</label>
-    //                         <span>${formattedDate}</span>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         </div>`
-
+  
   // RESET SIGNATURE - removes sintaure from proposal content
   const resetSignature = () => {
     setProposalVersion(proposalVersions[selectedVersionNum]?.content || '');

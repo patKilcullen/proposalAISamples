@@ -32,6 +32,7 @@ const SingleUser = (props) => {
     }
   };
 
+  // backgroun color of default img
   const userColor = useMemo(
     () =>
       generateColorFromName(user?.userName || user?.businessName || user?.id),
@@ -44,13 +45,10 @@ const SingleUser = (props) => {
         sx={{
           ...sxStyle,
           boxShadow: '0',
-          // boxShadow: `2px 2px 2px ${grey[500]}`,
-          // border: ".1px solid",
           borderColor: grey[500],
           p: 2,
-          // mb: 3,
           mt: 1,
-          position: 'relative', // Add relative positioning to the Card to contain absolutely positioned children
+          position: 'relative',
         }}
         className='item-hover'
         onClick={() => setOpenUserDetail(true)}
@@ -109,7 +107,7 @@ const SingleUser = (props) => {
                 >
                   {isBusiness
                     ? user?.businessName?.substring(0, 1).toUpperCase()
-                    : user?.userName?.substring(0, 1).toUpperCase() }
+                    : user?.userName?.substring(0, 1).toUpperCase()}
                 </Avatar>
               )
             ) : user?.profileUrl ? (

@@ -38,10 +38,10 @@ const TextSign = ({
           const dataUrl = canvas.toDataURL();
           // handleAddClientSignature({dataUrl, type: "text"});
           if (role === 'clientAdmin') {
-            handleAddClientSignature({signature: dataUrl, type: "text"});
+            handleAddClientSignature({ signature: dataUrl, type: 'text' });
           }
           if (role === 'businessAdmin') {
-            handleAddBusinessSignature({signature: dataUrl, type: "text"});
+            handleAddBusinessSignature({ signature: dataUrl, type: 'text' });
           }
           sendOtp();
         })

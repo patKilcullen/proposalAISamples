@@ -30,7 +30,7 @@ const OtherDetails = (props) => {
               color: (theme) => theme.palette.text.secondary,
             }}
           />
-          <AppTooltip title={business || <IntlMessages id="common.na" />}>
+          <AppTooltip title={business || <IntlMessages id='common.na' />}>
             <Box
               sx={{
                 ml: 3.5,
@@ -40,7 +40,7 @@ const OtherDetails = (props) => {
                 textOverflow: 'ellipsis',
               }}
             >
-              {business ? business : <IntlMessages id="common.na" />}
+              {business ? business : <IntlMessages id='common.na' />}
             </Box>
           </AppTooltip>
         </Box>
@@ -58,7 +58,9 @@ const OtherDetails = (props) => {
               color: (theme) => theme.palette.text.secondary,
             }}
           />
-          <AppTooltip title={contact.address || <IntlMessages id="common.na" />}>
+          <AppTooltip
+            title={contact.address || <IntlMessages id='common.na' />}
+          >
             <Box
               sx={{
                 ml: 3.5,
@@ -68,7 +70,11 @@ const OtherDetails = (props) => {
                 textOverflow: 'ellipsis',
               }}
             >
-              {contact.address ? contact.address : <IntlMessages id="common.na" />}
+              {contact.address ? (
+                contact.address
+              ) : (
+                <IntlMessages id='common.na' />
+              )}
             </Box>
           </AppTooltip>
         </Box>
@@ -85,7 +91,9 @@ const OtherDetails = (props) => {
               color: (theme) => theme.palette.text.secondary,
             }}
           />
-          <AppTooltip title={contact.twitterId || <IntlMessages id="common.na" />}>
+          <AppTooltip
+            title={contact.twitterId || <IntlMessages id='common.na' />}
+          >
             <Box
               sx={{
                 ml: 3.5,
@@ -95,7 +103,11 @@ const OtherDetails = (props) => {
                 textOverflow: 'ellipsis',
               }}
             >
-              {contact.twitterId ? contact.twitterId : <IntlMessages id="common.na" />}
+              {contact.twitterId ? (
+                contact.twitterId
+              ) : (
+                <IntlMessages id='common.na' />
+              )}
             </Box>
           </AppTooltip>
         </Box>

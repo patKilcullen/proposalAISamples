@@ -7,9 +7,7 @@ import {
   updateSelectedPara,
   getProposal,
   saveProposalPDF,
-  // sendProposalLink,
   sendProposalPDF,
-  // attachProposalToClient,
   updateExistingProposalVersion,
   updateProposal,
   updateExistingProposalVersion2,
@@ -17,7 +15,6 @@ import {
   createProposalTest,
   getUserProposals,
   addBusinessCollaborator,
-  // sendProposalInvite,
   addBusinessApprover,
   addClientCollaborator,
   addClientApprover,
@@ -40,8 +37,8 @@ const router = express.Router();
 router.post("/create-proposal", userAuth, createProposal);
 router.post("/prompt", generateWithPrompt);
 router.post("/update-para", updateSelectedPara);
-// TEST CREATE PROPOSAL
-router.post("/create-proposal-test", userAuth, createProposalTest);
+router.post("/create-proposal-test", userAuth, createProposalTest); // TEST CREATE PROPOSAL
+
 //GET
 router.get("/get-user-proposals/:id", userAuth, getUserProposals);
 router.get("/get-business-proposals/:bid", userAuth, getBusinessProposals);

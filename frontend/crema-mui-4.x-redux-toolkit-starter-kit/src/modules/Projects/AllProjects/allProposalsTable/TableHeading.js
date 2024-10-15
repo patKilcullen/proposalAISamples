@@ -6,11 +6,6 @@ import { Autorenew } from '@mui/icons-material';
 
 const TableHeading = ({ handleReverseDate, handleReverseOrder }) => {
   const [newestOrder, setNewestOrder] = useState(false);
-  const handleSwitchDate = () => {
-    setNewestOrder((prev) => !prev);
-    handleReverseDate(newestOrder);
-  };
-
   const [orderType, setOrderType] = useState({
      title: false,
     client: false,
@@ -19,6 +14,13 @@ const TableHeading = ({ handleReverseDate, handleReverseOrder }) => {
     status: false,
   });
 
+  // switch date order
+   const handleSwitchDate = () => {
+     setNewestOrder((prev) => !prev);
+     handleReverseDate(newestOrder);
+   };
+
+  //  change order type
   const handleSwitchOrder = (type) => {
      if (type === 'title') {
       setOrderType({ ...orderType, title: !orderType.title });
@@ -41,7 +43,7 @@ const TableHeading = ({ handleReverseDate, handleReverseOrder }) => {
 
   return (
     <TableHeader sx={{border: "2px solid red"}}>
-    
+  
       <TableCell sx={{display: "flex", justifyContent: "flex-start",  marginLeft: "-20px", }} align='left' onClick={() => handleSwitchOrder('title')}>
         Title
       </TableCell>

@@ -24,7 +24,6 @@ router.get("/:id", getBusiness);
 router.get("/:id/users", getBusinessUsers);
 
 // UPDATE
-// router.put("/update/:id", userAuth, upload.single('logo'), updateBusiness);
 router.put("/update/:id", userAuth, updateBusiness);
 
 // DELETE

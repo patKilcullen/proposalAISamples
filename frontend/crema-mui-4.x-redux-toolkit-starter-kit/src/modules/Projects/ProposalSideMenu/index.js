@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import AppCard from '@crema/components/AppCard';
-import {
-  Box,
-  FormControl,
-  Select,
-  MenuItem,
-  Typography,
-
-} from '@mui/material';
+import { Box, FormControl, Select, MenuItem, Typography } from '@mui/material';
 import AddTeamMembers from 'modules/teamManagement/AddTeamMembers';
 import CompareVersions from 'modules/Components/CompareVersions';
 import { useAuthUser } from '@crema/hooks/AuthHooks';
@@ -29,7 +22,7 @@ const ProposalSideMenu = ({
   hasAutoSaveError,
   roleType,
 }) => {
-  const { user } = useAuthUser();
+  const [updatedAt, setUpdatedAt] = useState('');
 
   // VERSION CREATOR... the creator of the current proposal version
   const [versionCreator, setVersionCreator] = useState({
@@ -38,6 +31,7 @@ const ProposalSideMenu = ({
     business: null,
   });
 
+  // SET VERSION CREATOR
   useEffect(() => {
     if (proposalVersions.length > 0) {
       const createrRole = getRoles(
@@ -46,24 +40,28 @@ const ProposalSideMenu = ({
       );
       setVersionCreator({
         user: proposalVersions[selectedVersionNum]?.creator,
-        //  role: createrRole.displayRole,
         role: createrRole,
         business: createrRole.roleType,
       });
     }
   }, [selectedVersionNum, proposalVersions]);
 
+  // VERSION CREATOR
   const memoizedVersionCreator = useMemo(() => {
     return (
       <SingleUser
         user={
-          versionCreator?.role?.role === 'businessAdmin'|| versionCreator?.role?.role === 'clientAdmin'
+          versionCreator?.role?.role === 'businessAdmin' ||
+          versionCreator?.role?.role === 'clientAdmin'
             ? versionCreator?.user?.businessId
             : versionCreator?.user
         }
         role={versionCreator?.role}
         isBusiness={
-          versionCreator?.role?.role === 'businessAdmin' || versionCreator?.role?.role === 'clientAdmin' ? true : false
+          versionCreator?.role?.role === 'businessAdmin' ||
+          versionCreator?.role?.role === 'clientAdmin'
+            ? true
+            : false
         }
         business={
           versionCreator.business === 'business'
@@ -77,17 +75,12 @@ const ProposalSideMenu = ({
     );
   }, [versionCreator]);
 
-  const [updatedAt, setUpdatedAt] = useState('');
-
   // WHEN PROPSAL UPDATED, ADD UPDATED DATE based on version displayed
   useEffect(() => {
     const versionDate = proposalVersions[selectedVersionNum]?.updatedAt;
     const date = new Date(versionDate);
-
     setUpdatedAt(formatDate(date));
   }, [proposal.updatedAt, selectedVersionNum, proposalVersions]);
-
-
 
   return (
     <AppCard sx={{ overflow: 'auto' }}>
@@ -137,8 +130,8 @@ const ProposalSideMenu = ({
               {proposal.status === 'signed'
                 ? `Signing completed: `
                 : proposal.status === 'clientSigned'
-                ? `Client signed: `
-                : `Saved :   `}
+                  ? `Client signed: `
+                  : `Saved :   `}
             </Typography>
             <Typography sx={{ color: 'black' }}>{updatedAt}</Typography>
           </Box>
@@ -147,7 +140,6 @@ const ProposalSideMenu = ({
           >
             Saved by:
             {versionCreator.role &&
-              //  memoizedVersionCreator?.props?.user?._id &&
               memoizedVersionCreator}
           </Typography>
           {/* USER ROLE */}

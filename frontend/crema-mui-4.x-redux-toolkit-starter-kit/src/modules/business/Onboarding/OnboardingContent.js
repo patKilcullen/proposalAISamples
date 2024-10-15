@@ -7,17 +7,14 @@ import { Button, Box } from '@mui/material';
 import {
   UserProfileSetup,
   BusinessSetup,
-  IndustrySelection,
-  AgreementTermsConditions,
-  ConfirmationWelcome,
   DashboardTour,
-  DocumentPreference,
-  LegalInfo,
-  PersonalizedTemplate,
-  AddMembersOnboarding,
 } from './OnboardingSteps';
 
-import { fetchError, onEditPartialBusiness, onUpdateUser } from '../../../toolkit/actions';
+import {
+  fetchError,
+  onEditPartialBusiness,
+  onUpdateUser,
+} from '../../../toolkit/actions';
 import { useJWTAuthActions } from '@crema/services/auth/jwt-auth/JWTAuthProvider';
 import { useAuthUser } from '@crema/hooks/AuthHooks';
 const OnboardingContent = ({
@@ -26,20 +23,16 @@ const OnboardingContent = ({
   handleBack,
   activeStep,
   handleReset,
-  setActiveStep
+  setActiveStep,
 }) => {
   const { user } = useAuthUser();
+  const { getAuthUser } = useJWTAuthActions();
   const business = useSelector(({ business }) => business.singleBusiness);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [onboardingSave, setOnboardingSave] = useState(false);
   const [formError, setFormError] = useState(false);
   const [onboardingComplete, setOnboardingComplete] = useState(false);
-  const { getAuthUser } = useJWTAuthActions();
-  // const [formErrors, setFormErrors] = useState([]);
-
-
-
 
   //ONBAORDING SAVE..  saves the form information from the onboarding step and moved onto next step
   const handleOnboardingSave = () => {
@@ -56,8 +49,6 @@ const OnboardingContent = ({
   }, [business]);
 
   const handleFinishOnboarding = async () => {
-    
-
     try {
       // Update business onboarding complete to ture
       await dispatch(
@@ -67,28 +58,27 @@ const OnboardingContent = ({
         }),
       );
 
-       // Update user role to admin
-    await dispatch(
-      onUpdateUser({
-        ...user,
-        role: 'admin',
-      }),
-    );
- 
+      // Update user role to admin
+      await dispatch(
+        onUpdateUser({
+          ...user,
+          role: 'admin',
+        }),
+      );
+
       //  getAuthUser to use the authenitcation user, which now haw business with agrred to terms, which enables what pages user can see
       getAuthUser();
       // navigate('/dashboard');
-           navigate('/create-project');
+      navigate('/create-project');
     } catch (error) {
-
       console.error('Error during onSubmit:', error);
-      fetchError(error)
+      fetchError(error);
     }
   };
 
   const onboardingComponents = [
     <UserProfileSetup
-    key={"UserProfileSetup"}
+      key={'UserProfileSetup'}
       onboardingSave={onboardingSave}
       setOnboardingSave={setOnboardingSave}
       handleNext={handleNext}
@@ -97,16 +87,20 @@ const OnboardingContent = ({
     />,
 
     <BusinessSetup
-    key={"BusinessSetup"}
+      key={'BusinessSetup'}
       onboardingSave={onboardingSave}
       setOnboardingSave={setOnboardingSave}
       handleNext={handleNext}
       setFormError={setFormError}
-      // setFormErrors={setFormErrors}
       setActiveStep={setActiveStep}
-
     />,
-
+    <DashboardTour
+      key={'DashboardTour'}
+      onboardingSave={onboardingSave}
+      setOnboardingSave={setOnboardingSave}
+      handleNext={handleNext}
+    />,
+    // POTENTIAL OTHER STEPS
     // <AddMembersOnboarding
     // key={"AddMembersOnboarding"}
     //   onboardingSave={onboardingSave}
@@ -146,12 +140,6 @@ const OnboardingContent = ({
     //   handleNext={handleNext}
     //   setFormError={setFormError}
     // />,
-    <DashboardTour
-    key={"DashboardTour"}
-      onboardingSave={onboardingSave}
-      setOnboardingSave={setOnboardingSave}
-      handleNext={handleNext}
-    />,
     // <ConfirmationWelcome
     //   onboardingSave={onboardingSave}
     //   setOnboardingSave={setOnboardingSave}
@@ -164,21 +152,17 @@ const OnboardingContent = ({
     : onboardingComponents;
 
   return (
-    <Box sx={{  overflow: "scroll"}}>
+    <Box sx={{ overflow: 'scroll' }}>
       {/* RENDER CORRECT COMPONENT based one step number */}
       <AppCard>{filteredComponents[activeStep]}</AppCard>
-      <Box     >
+      <Box>
         <AppCard>
+        {/* ERROR MESSAGE */}
           {formError ? (
             <>
-              <Box sx={{ mb: 2, color: 'red',  }}>
+              <Box sx={{ mb: 2, color: 'red' }}>
                 Please ensure the form is filled out correctly...
               </Box>
-              {/* <Box>
-                {formErrors.map((error, index) => (
-                  <Box key={index} sx={{ mb: 2, color: 'red' }}>{error}</Box>
-                ))}
-              </Box> */}
             </>
           ) : null}
           <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
@@ -195,7 +179,6 @@ const OnboardingContent = ({
               onClick={
                 activeStep === steps.length - 1
                   ? () => {
-                      // navigate('/add-team-members');
                       handleFinishOnboarding();
                     }
                   : () => {

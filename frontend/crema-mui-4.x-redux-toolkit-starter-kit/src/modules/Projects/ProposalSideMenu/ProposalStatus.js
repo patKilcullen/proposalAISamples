@@ -9,6 +9,7 @@ import { roleStatusDisplay } from 'utils/roleStatusDisplay';
 
 const ProposalStatus = ({ proposal, roleType }) => {
   const [status, setStatus] = useState('');
+
   // Get STATUS bases on role and proposal status
   useEffect(() => {
     if (roleType) {
@@ -22,6 +23,7 @@ const ProposalStatus = ({ proposal, roleType }) => {
     business: { role: '', name: '', user: '', isBusiness: false },
   });
 
+  // SET SIGNATORIES
   useEffect(() => {
     let businessRole = getRoles(proposal, proposal?.businessSignerId);
     let clientRole = getRoles(proposal, proposal?.clientSignerId);

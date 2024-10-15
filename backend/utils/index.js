@@ -57,7 +57,6 @@ export function isValidURL(string) {
 
 export const generateAndStoreOtp = async (userId) => {
   const otp = crypto.randomInt(0, 1000000);
-  // const otp = crypto.randomBytes(3).toString("hex"); // Generate a 6-character OTP
   const expirationTime = new Date();
   expirationTime.setMinutes(expirationTime.getMinutes() + 15); // Set OTP expiration time to 5 minutes
 

@@ -11,7 +11,6 @@ import jwtAxios from '@crema/services/auth/jwt-auth';
 
 // GET BUSINESS USERS CONTACTS
 export const onGetBusinessUserContacts = (id) => {
-
   return (dispatch) => {
     const { messages } = appIntl();
     dispatch({ type: FETCH_CONTACTS_START });
@@ -22,11 +21,7 @@ export const onGetBusinessUserContacts = (id) => {
           const businessUsers = data.data.users;
           //FILTER TO ONLY INCLUDE USERS EMAIL
           const usersWithEmail = businessUsers.filter((user) => user.email);
-
-          // GET UNIQUE EMAILS TO SEND
           const userEmails = usersWithEmail.map((user) => user.email);
-
-          // dispatch({ type: FETCH_SUCCESS });
           dispatch({ type: FETCH_CONTACTS_SUCCESS });
           dispatch({ type: GET_UNIQUE_EMAILS, payload: userEmails });
         } else {
@@ -42,9 +37,9 @@ export const onGetBusinessUserContacts = (id) => {
   };
 };
 
+// GET CONTACTS
 export const onGetUserContacts = (id) => {
   const { messages } = appIntl();
-
   return async (dispatch) => {
     // USES UNIQUE FETCH STARt to include uniqule load when fetching client
     // to not interfere with regual loading and to add loading to contacts input
@@ -91,6 +86,7 @@ export const onGetUserContacts = (id) => {
   };
 };
 
+// ADD CONTACTS
 export const onAddContacts = (contacts) => {
   const { messages } = appIntl();
 

@@ -6,11 +6,13 @@ const UsersSelect = ({ proposal }) => {
   const [businessName, setBusinessName] = useState('');
   const [clientName, setClientName] = useState('');
 
+  // SET BIZ AND CLIENT NAMES
   useEffect(() => {
     setBusinessName(proposal.businessId.businessName);
     setClientName(proposal?.clientId?.userName);
   }, [proposal.businessId.businessName, proposal.clientId?.userName]);
 
+  // MEMOIZED VERSION OF DIFERENT ROLES
   const memoizedBusinessUser = useMemo(() => {
     return {
       role: 'businessAdmin',

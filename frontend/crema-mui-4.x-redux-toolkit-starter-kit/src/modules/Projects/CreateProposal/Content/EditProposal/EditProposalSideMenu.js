@@ -17,15 +17,9 @@ const EditProposalSideMenu = ({
   displayRole,
   hasAutoSaveError,
   allowAutoSave,
-roleType
+  roleType,
 }) => {
-  {
-    /* BUTTONS */
-  }
-  {
-    /* If on latest proposalVersion, or status is draft, display buttons, otherwise display nothing */
-  }
-
+  // BUTTONS
   const buttons =
     selectedVersionNum === proposalVersions?.length - 1 ||
     status === 'draft' ? (
@@ -46,7 +40,7 @@ roleType
           status === 'returned-revision') ||
         (role === 'businessCollaborator' && status === 'returned') ||
         // (status === 'draft' && role === 'businessApprover')  ? null : (
-            (role === 'businessApprover')  ? null : (
+        role === 'businessApprover' ? null : (
           <Button
             sx={{
               padding: 0,
@@ -63,8 +57,8 @@ roleType
               status === 'draft' && role === 'businessAdmin'
                 ? null
                 : role === 'businessAdmin' && status === 'returned'
-                ? () => handleSendProposalRevision('returned-revision')
-                : () => handleSendProposalRevision(status)
+                  ? () => handleSendProposalRevision('returned-revision')
+                  : () => handleSendProposalRevision(status)
             }
           >
             {status === 'draft' &&
@@ -92,17 +86,17 @@ roleType
                 ? // SEND PROPOSAL POP UP/MODAL
                   handleSendToClient
                 : role === 'clientAdmin' && status === 'in-revision'
-                ? () => {
-                    handleSendUpdateCurrentVersion('returned');
-                  }
-                : (role === 'businessAdmin' &&
-                    status === 'returned-revision') ||
-                  // if user hits (accept on returned proposal,keep clients changes and update status to sent)
-                  (role === 'businessAdmin' && status === 'returned')
-                ? () => {
-                    handleSendUpdateCurrentVersion('sent');
-                  }
-                : null
+                  ? () => {
+                      handleSendUpdateCurrentVersion('returned');
+                    }
+                  : (role === 'businessAdmin' &&
+                        status === 'returned-revision') ||
+                      // if user hits (accept on returned proposal,keep clients changes and update status to sent)
+                      (role === 'businessAdmin' && status === 'returned')
+                    ? () => {
+                        handleSendUpdateCurrentVersion('sent');
+                      }
+                    : null
             }
           >
             {role === 'businessAdmin' && status === 'returned'

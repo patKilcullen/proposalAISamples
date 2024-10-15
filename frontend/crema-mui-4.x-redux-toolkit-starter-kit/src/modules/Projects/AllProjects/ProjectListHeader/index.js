@@ -12,10 +12,8 @@ const ProjectContentHeader = (props) => {
     activeProjects,
     completedProjects,
   } = props;
-
   const { messages } = useIntl();
 
-  const [dropdownValue, setDropdownValue] = useState('in-review');
 
   return (
     <Box

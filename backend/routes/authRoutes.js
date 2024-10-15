@@ -12,6 +12,7 @@ const router = express.Router();
 router.post("/register", register);
 router.post("/login", login);
 
+// google
 router.post("/create-google", createUserGoogle);
 router.post("/login-google", loginGoogle);
 

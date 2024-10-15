@@ -8,12 +8,17 @@ const AllProposalUsers = ({ proposal, userRole, stakeholders }) => {
   const [businessName, setBusinessName] = useState('');
   const [clientName, setClientName] = useState('');
 
-
+  // SET BUSINESS AND CLIENT NAME
   useEffect(() => {
     setBusinessName(proposal?.businessId?.businessName);
-    setClientName(proposal.clientId?.businessId ? proposal.clientId.businessId.businessName : proposal.clientId?.userName);
+    setClientName(
+      proposal.clientId?.businessId
+        ? proposal.clientId.businessId.businessName
+        : proposal.clientId?.userName,
+    );
   }, [proposal?.businessId?.businessName, proposal.clientId?.userName]);
 
+  // MEMOIZED VERSION OF DIFERENT ROLES
   const memoizedBusinessUser = useMemo(() => {
     return (
       <SingleUser
@@ -25,32 +30,36 @@ const AllProposalUsers = ({ proposal, userRole, stakeholders }) => {
           userRole === 'businessAdmin'
             ? 'business'
             : userRole === 'clientAdmin'
-            ? 'client'
-            : null
+              ? 'client'
+              : null
         }
       />
     );
   }, [proposal._id, businessName]);
 
-
-    const memoizedClientUser = useMemo(() => {
+  const memoizedClientUser = useMemo(() => {
     return proposal?.clientId ? (
       <SingleUser
-      ass={true}
-      isBusiness={proposal?.clientId?.businessId ? true : false}
-        user={proposal?.clientId?.businessId ? proposal.clientId.businessId : proposal?.clientId} //if client has business, display business info
+        ass={true}
+        isBusiness={proposal?.clientId?.businessId ? true : false}
+        user={
+          proposal?.clientId?.businessId
+            ? proposal.clientId.businessId
+            : proposal?.clientId
+        } //if client has business, display business info
         role={{ displayRole: 'Client Administrator', role: 'clientAdmin' }}
         business={clientName}
         businessType={
           userRole === 'businessAdmin'
             ? 'business'
             : userRole === 'clientAdmin'
-            ? 'client'
-            : null
+              ? 'client'
+              : null
         }
       />
     ) : null;
   }, [proposal._id, clientName]);
+
   const memoizedClientCollaborators = useMemo(() => {
     return proposal?.clientCollaborators?.length > 0
       ? proposal.clientCollaborators.map((user, key) => (
@@ -68,8 +77,8 @@ const AllProposalUsers = ({ proposal, userRole, stakeholders }) => {
               userRole === 'businessAdmin'
                 ? 'business'
                 : userRole === 'clientAdmin'
-                ? 'client'
-                : null
+                  ? 'client'
+                  : null
             }
           />
         ))
@@ -93,8 +102,8 @@ const AllProposalUsers = ({ proposal, userRole, stakeholders }) => {
               userRole === 'businessAdmin'
                 ? 'business'
                 : userRole === 'clientAdmin'
-                ? 'client'
-                : null
+                  ? 'client'
+                  : null
             }
           />
         ))
@@ -115,8 +124,8 @@ const AllProposalUsers = ({ proposal, userRole, stakeholders }) => {
               userRole === 'businessAdmin'
                 ? 'business'
                 : userRole === 'clientAdmin'
-                ? 'client'
-                : null
+                  ? 'client'
+                  : null
             }
           />
         ))
@@ -140,8 +149,8 @@ const AllProposalUsers = ({ proposal, userRole, stakeholders }) => {
               userRole === 'businessAdmin'
                 ? 'business'
                 : userRole === 'clientAdmin'
-                ? 'client'
-                : null
+                  ? 'client'
+                  : null
             }
           />
         ))
@@ -149,16 +158,35 @@ const AllProposalUsers = ({ proposal, userRole, stakeholders }) => {
   }, [proposal._id, businessName]);
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center", alignItems: "center"}}> 
-    {!stakeholders &&<Typography sx={{ borderBottom: "1px solid", borderColor: grey[500], fontWeight: "bold", fontSize: "18px",}}>Proposal Roles</Typography>} 
-    <AppCard sx={{ boxShadow: "0", overflow: "auto", width: "250px"}}>
-      {memoizedBusinessUser}
-      {memoizedClientUser}
-      {memoizedClientCollaborators}
-      {memoizedBusinessCollaborators}
-      {memoizedClientApprovers}
-      {memoizedBusinessApprovers}
-    </AppCard>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      {!stakeholders && (
+        <Typography
+          sx={{
+            borderBottom: '1px solid',
+            borderColor: grey[500],
+            fontWeight: 'bold',
+            fontSize: '18px',
+          }}
+        >
+          Proposal Roles
+        </Typography>
+      )}
+      <AppCard sx={{ boxShadow: '0', overflow: 'auto', width: '250px' }}>
+        {memoizedBusinessUser}
+        {memoizedClientUser}
+        {memoizedClientCollaborators}
+        {memoizedBusinessCollaborators}
+        {memoizedClientApprovers}
+        {memoizedBusinessApprovers}
+      </AppCard>
     </Box>
   );
 };

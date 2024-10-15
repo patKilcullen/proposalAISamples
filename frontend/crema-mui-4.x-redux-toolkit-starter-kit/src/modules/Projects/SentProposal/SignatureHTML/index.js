@@ -4,7 +4,6 @@
 
     // CLIENT SIGNATURE
   export const handleAddClientSignatureHTML = ({signature, type, user}) => {
-
     const date = new Date();
     const formattedDate = formatDate(date);
     let sanitizedSignature = DOMPurify.sanitize(signature);

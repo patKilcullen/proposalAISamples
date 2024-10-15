@@ -31,7 +31,7 @@ const PersonalDetails = (props) => {
               color: (theme) => theme.palette.text.secondary,
             }}
           />
-          <AppTooltip  title={contact.email || <IntlMessages id="common.na" />}>
+          <AppTooltip title={contact.email || <IntlMessages id='common.na' />}>
             <Box
               sx={{
                 ml: 3.5,
@@ -43,7 +43,7 @@ const PersonalDetails = (props) => {
             >
               {contact.email}
             </Box>
-          </AppTooltip >
+          </AppTooltip>
         </Box>
 
         <Box
@@ -58,7 +58,7 @@ const PersonalDetails = (props) => {
               color: (theme) => theme.palette.text.secondary,
             }}
           />
-          <AppTooltip  title={contact.mobile || <IntlMessages id="common.na" />}>
+          <AppTooltip title={contact.mobile || <IntlMessages id='common.na' />}>
             <Box
               sx={{
                 ml: 3.5,
@@ -70,7 +70,7 @@ const PersonalDetails = (props) => {
             >
               {contact.mobile}
             </Box>
-          </AppTooltip >
+          </AppTooltip>
         </Box>
 
         <Box
@@ -85,7 +85,7 @@ const PersonalDetails = (props) => {
               color: (theme) => theme.palette.text.secondary,
             }}
           />
-          <AppTooltip  title={contact.url || <IntlMessages id="common.na" />}>
+          <AppTooltip title={contact.url || <IntlMessages id='common.na' />}>
             <Box
               sx={{
                 ml: 3.5,
@@ -95,9 +95,9 @@ const PersonalDetails = (props) => {
                 textOverflow: 'ellipsis',
               }}
             >
-              {contact.url ? contact.url : <IntlMessages id="common.na" />}
+              {contact.url ? contact.url : <IntlMessages id='common.na' />}
             </Box>
-          </AppTooltip >
+          </AppTooltip>
         </Box>
       </div>
     </Box>

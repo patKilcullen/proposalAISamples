@@ -11,6 +11,7 @@ import {
   sendOneTimePassword,
 } from "../utils/sendEmail.js";
 
+// REGISTER
 export const register = async (req, res, next) => {
   const { userName, email, password, role } = req.body;
 
@@ -141,7 +142,7 @@ export const loginGoogle = async (req, res, next) => {
   }
 };
 
-// SIGN UP/CREATE USER GOOGLE =>
+// SIGN UP/CREATE USER with GOOGLE =>
 export const createUserGoogle = async (req, res, next) => {
   const { googleId, name, businessId, email, role } = req.body;
   try {
@@ -163,7 +164,6 @@ export const createUserGoogle = async (req, res, next) => {
         googleId: googleId,
         email: email,
         userName: name,
-        // verified: true,
         role: role,
       });
     }
@@ -190,6 +190,7 @@ export const createUserGoogle = async (req, res, next) => {
   }
 };
 
+// SEND ONE TIME PASSWORD
 export const sendOtp = async (req, res, next) => {
   const { name, email, role } = req.body;
 
@@ -210,6 +211,7 @@ export const sendOtp = async (req, res, next) => {
   }
 };
 
+// VERIFY ONE TIME PASSWORD
 export const verifyOtp = async (req, res, next) => {
   const { otp } = req.body;
   const userId = req.user._id;
@@ -236,6 +238,7 @@ export const verifyOtp = async (req, res, next) => {
   }
 };
 
+// RESEND VERIFICATION EMAIL
 export const resendVerifyEmail = async (req, res, next) => {
   const { user } = req.body;
 

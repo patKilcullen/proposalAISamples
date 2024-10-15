@@ -9,17 +9,14 @@ import { LLMChain } from "langchain/chains";
 dotenv.config();
 
 const chat = new ChatOpenAI({
-
   temperature: 0,
 });
-
-
 
 export const generateProposal = async ({
   businessInfo,
   proposalInfo,
   clientInfo,
-  title
+  title,
 }) => {
   const {
     businessName,
@@ -62,11 +59,9 @@ export const generateProposal = async ({
     clientBusinessRepEmail,
     clientUrl,
   } = clientInfo;
-console.log("TTILE : ", title)
+
   const proposalPrompt = ChatPromptTemplate.fromPromptMessages([
-    SystemMessagePromptTemplate.fromTemplate(
-      `hidden`
-    ),
+    SystemMessagePromptTemplate.fromTemplate(`hidden`),
     HumanMessagePromptTemplate.fromTemplate(
       `hidden
         `

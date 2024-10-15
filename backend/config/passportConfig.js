@@ -27,9 +27,7 @@ export default function passportConfig() {
     })
   );
 
-
-// TODO: IS GOOGLE STRATEGY USED?
-
+  // Currently Not Used
   // Google OAuth Strategy
   const googleOpts = {
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -38,30 +36,26 @@ export default function passportConfig() {
   };
 
   passport.use(
-    new GoogleStrategy(
-      googleOpts,
-      async (accessToken, refreshToken, profile, done) => {
-        try {
+    new GoogleStrategy(googleOpts, async (profile, done) => {
+      try {
+        let user = await User.findOne({ googleId: profile.id });
 
-          let user = await User.findOne({ googleId: profile.id });
-
-          if (!user) {
-            user = await User.create({
-              role:"businessUser",
-              googleId: profile.id,
-              email: profile.emails[0].value,
-              userName: profile.displayName,
-              verified: true,
-            });
-          }
-          const idToken = createJWT(user?._id);
-
-          return done(null, user, { idToken });
-        } catch (error) {
-          return done(error, false);
+        if (!user) {
+          user = await User.create({
+            role: "businessUser",
+            googleId: profile.id,
+            email: profile.emails[0].value,
+            userName: profile.displayName,
+            verified: true,
+          });
         }
+        const idToken = createJWT(user?._id);
+
+        return done(null, user, { idToken });
+      } catch (error) {
+        return done(error, false);
       }
-    )
+    })
   );
 
   passport.serializeUser((user, done) => {
@@ -70,7 +64,7 @@ export default function passportConfig() {
 
   passport.deserializeUser((id, done) => {
     User.findById(id)
-      .exec() // Use exec() to return a promise
+      .exec()
       .then((user) => {
         done(null, user);
       })

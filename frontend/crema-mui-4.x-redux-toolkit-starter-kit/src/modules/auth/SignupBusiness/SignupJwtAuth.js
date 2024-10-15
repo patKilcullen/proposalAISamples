@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import { Checkbox, Select, MenuItem, TextField } from '@mui/material';
 import { Form, Formik } from 'formik';
 import * as yup from 'yup';
-
 import AppInfoView from '@crema/components/AppInfoView';
 import Box from '@mui/material/Box';
 import IntlMessages from '@crema/helpers/IntlMessages';
@@ -12,10 +11,7 @@ import { useAuthMethod } from '@crema/hooks/AuthHooks';
 import { Fonts } from '@crema/constants/AppEnums';
 import { Link } from 'react-router-dom';
 import AuthWrapper from '../AuthWrapper';
-
 import PasswordChecklist from 'react-password-checklist';
-
-
 import GoogleAuthSignUp from '../GoogleAuth/GoogleSignUp';
 
 
@@ -34,15 +30,12 @@ const validationSchema = yup.object({
 const SignupJwtAuth = () => {
   const { signUpBusiness, signUpBusinessGoogle } = useAuthMethod();
  const [agreeToTermsAndPolicy, setAgreeToTermsAndPolicy] = useState(false);
-
   const [password, setPassword] = useState('');
   const [confrimPassword, setConfrimPassword] = useState('');
   const [showErrors, setShowErrors] = useState(false);
-
   const [selectedIndustry, setSelectedIndustry] = useState(null);
 
-
-
+// on gooole sucess
    const googleSuccess = async (res) => {
      try {
        signUpBusinessGoogle( {

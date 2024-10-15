@@ -6,13 +6,12 @@ import { onAddContacts, onSendUserInvite } from '../../toolkit/actions';
 import PleaseCreateBusiness from 'modules/errorPages/PleaseCreateBusinessModal';
 import SelectContactsWithRole from 'modules/Components/SelectContactsWithRole';
 
-
 export default function AddTeamMembers({ proposal, businessRole, role }) {
   const { user } = useAuthUser();
   const dispatch = useDispatch();
   const [selectedEmails, setSelectedEmails] = useState([]);
   const [openAddTeamMembers, setOpenAddTeamMembers] = useState(false);
-  const [updateClientAsBusiness, setUpdateClientAsBusiness] = useState(false)
+  const [updateClientAsBusiness, setUpdateClientAsBusiness] = useState(false);
 
   // OPEN ADD TEAM MEMBERS
   // avaiable to business and client admins only if businesness onbaording complete, otherwise show please create proposal modal
@@ -23,10 +22,10 @@ export default function AddTeamMembers({ proposal, businessRole, role }) {
       setShowPleaseCreateBusiness(true);
     } else {
       // if type is businessToClient, business Admin is updated client
-      if(type === "businessToClient"){
-        setUpdateClientAsBusiness(true)
-      }else{
-        setUpdateClientAsBusiness(false)
+      if (type === 'businessToClient') {
+        setUpdateClientAsBusiness(true);
+      } else {
+        setUpdateClientAsBusiness(false);
       }
       setOpenAddTeamMembers(true);
     }
@@ -41,14 +40,13 @@ export default function AddTeamMembers({ proposal, businessRole, role }) {
 
   // ADD MEMBER: sends invite email to each user
   const onAddMember = async (selectedEmails) => {
-
     addContacts();
     for (const member of selectedEmails) {
       dispatch(
         onSendUserInvite({
           proposal,
-   // if type is businessToClient, business Admin is updated client, so use 'client'
-          role: `${updateClientAsBusiness ? "client" : businessRole}${member.role}`,
+          // if type is businessToClient, business Admin is updated client, so use 'client'
+          role: `${updateClientAsBusiness ? 'client' : businessRole}${member.role}`,
           clientEmail: member.contactEmail,
         }),
       );
@@ -61,7 +59,7 @@ export default function AddTeamMembers({ proposal, businessRole, role }) {
       {/* ADD TEAM MEMBERS */}
       {(role === 'businessAdmin' || role === 'clientAdmin') && (
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Button onClick={()=>handleOpenAddTeamMembers()} color='primary'>
+          <Button onClick={() => handleOpenAddTeamMembers()} color='primary'>
             Add Team Members
           </Button>
         </Box>
@@ -69,7 +67,10 @@ export default function AddTeamMembers({ proposal, businessRole, role }) {
       {/* ADD CLEINT TEAM MEMBERS IF BUSINESS ADMIN */}
       {role === 'businessAdmin' && (
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Button onClick={()=> handleOpenAddTeamMembers("businessToClient")} color='primary'>
+          <Button
+            onClick={() => handleOpenAddTeamMembers('businessToClient')}
+            color='primary'
+          >
             Add Client Team Members
           </Button>
         </Box>
@@ -90,7 +91,6 @@ export default function AddTeamMembers({ proposal, businessRole, role }) {
         handleClose={handleCloseAddTeamMembers}
         onSend={onAddMember}
       />
- 
     </Box>
   );
 }

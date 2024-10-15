@@ -8,14 +8,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import AppLoader from '@crema/components/AppLoader';
 import CopyLinkButton from './CopyLinkButton';
-
 import { useInfoViewActionsContext } from '@crema/context/AppContextProvider/InfoViewContextProvider';
-
 import { useAuthUser } from '@crema/hooks/AuthHooks';
 import validator from 'email-validator';
 import ResendVerificationEmail from './VerifyEmail';
 import { fetchError } from 'toolkit/actions';
 import ExitButton from './ExitButton';
+
 const style = {
   position: 'absolute',
   top: '50vh',
@@ -46,57 +45,37 @@ export default function SelectContacts({
   setMessage,
   existingEmail,
 
-
   selectedEmails,
-setSelectedEmails
-
+  setSelectedEmails,
 }) {
-  const dispatch = useDispatch()
-const {user} = useAuthUser()
+  const dispatch = useDispatch();
+  const { user } = useAuthUser();
   const { loadingContacts, message } = useSelector(({ contacts }) => contacts);
-  // FETCH CONTEXT
-  // const { fetchError } = useInfoViewActionsContext();
   const [open, setOpen] = useState(false);
-  // const [selectedEmails, setSelectedEmails] = useState([]);
   const [searchValue, setSearchValue] = useState('');
-  const [emailVerified, setEmailVerified] = useState(false)
+  const [emailVerified, setEmailVerified] = useState(false);
 
-
-// useEffect(()=>{
-// setSelectedEmails([existingEmail]);
-// }, [existingEmail])
-  // OPEN MODAL When show contacts is set to true, set open and SHOW MODAL
- 
   useEffect(() => {
-
     // FAILED TO LOAD CONTACTS... display message
-
- if(!loadingContacts && message){
-
-  dispatch(fetchError(message))
-
-  }
+    if (!loadingContacts && message) {
+      dispatch(fetchError(message));
+    }
 
     if (showContacts) {
-
       setOpen(true);
-   
     } else {
       setOpen(false);
       setShowContacts(false);
     }
-    if(user.verified){
-      setEmailVerified(true)
+    if (user.verified) {
+      setEmailVerified(true);
     }
   }, [showContacts]);
- 
 
- 
   //   CLOSE MODAL
   const handleClose = () => {
     setOpen(false);
     setShowContacts(false);
-
   };
 
   // ADD EMIAIL to list... check for valid email,
@@ -111,7 +90,7 @@ const {user} = useAuthUser()
         setSearchValue('');
       }
     } else {
-     dispatch(fetchError('Please submit a valid email'));
+      dispatch(fetchError('Please submit a valid email'));
     }
   };
 
@@ -138,7 +117,7 @@ const {user} = useAuthUser()
       aria-describedby='modal-modal-description'
     >
       <Box sx={style}>
-        <ExitButton onClose={handleClose}/>
+        <ExitButton onClose={handleClose} />
         <Typography
           id='modal-modal-title'
           variant='h1'
@@ -151,7 +130,9 @@ const {user} = useAuthUser()
         {!emailVerified ? (
           <>
             <Typography>Please verify your email to contiue...</Typography>
-            <ResendVerificationEmail  message={"Please verify email address to send a proposal"}/>
+            <ResendVerificationEmail
+              message={'Please verify email address to send a proposal'}
+            />
           </>
         ) : (
           <Box
@@ -170,40 +151,41 @@ const {user} = useAuthUser()
               }}
             >
               {/* SELECTED EMAILS */}
-              {selectedEmails.length > 0 && selectedEmails.map((email, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    border: '1px solid black',
-                    borderRadius: '20px',
-                    height: '40px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    maxWidth: '200px',
-                    overflow: 'hidden',
-                    position: 'relative',
-                  }}
-                >
-                  <Typography
+              {selectedEmails.length > 0 &&
+                selectedEmails.map((email, index) => (
+                  <Box
+                    key={index}
                     sx={{
-                      flexGrow: 1,
-                      padding: '0 10px',
-                      whiteSpace: 'nowrap',
+                      border: '1px solid black',
+                      borderRadius: '20px',
+                      height: '40px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      maxWidth: '200px',
                       overflow: 'hidden',
-                      textOverflow: 'ellipsis',
+                      position: 'relative',
                     }}
                   >
-                    {email}...
-                  </Typography>
-                  {/* REMOVE CONTACT BUTTONG */}
-                  <IconButton
-                    sx={{ position: 'absolute', right: '-10px' }}
-                    onClick={() => handleRemoveEmail(index)}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </Box>
-              ))}
+                    <Typography
+                      sx={{
+                        flexGrow: 1,
+                        padding: '0 10px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                    >
+                      {email}...
+                    </Typography>
+                    {/* REMOVE CONTACT BUTTONG */}
+                    <IconButton
+                      sx={{ position: 'absolute', right: '-10px' }}
+                      onClick={() => handleRemoveEmail(index)}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </Box>
+                ))}
               {/* DISPLAY LOADER when contacts are loading */}
               <Box sx={{ display: 'flex' }}>
                 {loadingContacts ? (
@@ -273,21 +255,6 @@ const {user} = useAuthUser()
             </Box>
           </Box>
         )}
-        {/* MESSAGE BOX only display if used has added email to list */}
-        {/* {selectedEmails.length > 0 ? (
-          <TextField
-            multiline
-            name='message'
-            variant='outlined'
-            rows={4}
-            sx={{
-              width: '100%',
-              my: 2,
-            }}
-            placeholder='message'
-            onChange={(e) => setMessage(e.target.value)}
-          />
-        ) : null} */}
         <Box
           sx={{
             display: 'flex',
@@ -297,19 +264,13 @@ const {user} = useAuthUser()
           }}
         >
           {/* COPY BUTTON */}
-          <CopyLinkButton 
-          text={link} 
-           />
-           {/* SUBMIT BUTTTIN */}
-                  <Button
-            // onClick={() => handleSubmit(selectedEmails)} 
-                onClick={() => {
-             
-                  handleSubmit(selectedEmails)
-//  setSendToClient((prev)=> !prev)
-                }} 
+          <CopyLinkButton text={link} />
+          {/* SUBMIT BUTTTIN */}
+          <Button
+            onClick={() => {
+              handleSubmit(selectedEmails);
+            }}
             variant='contained'
-            // disabled={selectedEmails.length > 0 ? false : true}
             disabled={selectedEmails.length <= 0 || !emailVerified}
           >
             {buttonText}

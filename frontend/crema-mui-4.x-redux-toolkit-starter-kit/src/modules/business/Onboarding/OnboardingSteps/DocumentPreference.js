@@ -11,7 +11,6 @@ import TemplatePreview from './TemplateSamples/TemplatePreview';
 import proposalStyles from './TemplateSamples/ProposalStyles';
 import agreementStyles from './TemplateSamples/AgreementStyles';
 
-
 const validationSchema = yup.object({
   proposalTemplate: yup.string().required('Required'),
   agreementTemplate: yup.string().required('Required'),
@@ -22,8 +21,14 @@ const DocumentPreferences = (
   ref,
 ) => {
   const formikRef = useRef();
+  const { loading } = useSelector(({ common }) => common);
+  const [selectedProposal, setSelectedProposal] = useState('');
+  const [selectedAgreement, setSelectedAgreement] = useState('');
+  const [askToPreviewProposal, setAskToPreviewProposal] = useState(false);
+  const [askToPreviewAgreement, setAskToPreviewAgreement] = useState(false);
+  const [previewAgreement, setPreviewAgreement] = useState(false);
+  const [previewProposal, setPreviewProposal] = useState(false);
 
-  const { loading, hideMessage } = useSelector(({ common }) => common);
   useEffect(() => {
     if (formikRef.current) {
       formikRef.current.setErrors({
@@ -48,14 +53,8 @@ const DocumentPreferences = (
     setOnboardingSave(false);
   }, [onboardingSave]);
 
-  // SELECT/PREVIEW Proposals and agreements, if pros=posal/agreement is selected, show preview button, if button is pressed, show preview
-  const [selectedProposal, setSelectedProposal] = useState('');
-  const [selectedAgreement, setSelectedAgreement] = useState('');
-  const [askToPreviewProposal, setAskToPreviewProposal] = useState(false);
-  const [askToPreviewAgreement, setAskToPreviewAgreement] = useState(false);
-  const [previewAgreement, setPreviewAgreement] = useState(false);
-  const [previewProposal, setPreviewProposal] = useState(false);
-
+  // SELECT/PREVIEW Proposals and agreements, if pros=posal/agreement is selected,
+  // show preview button, if button is pressed, show preview
   const handleSelectProposal = (style) => {
     setSelectedProposal(style);
     setAskToPreviewProposal(true);
@@ -70,22 +69,6 @@ const DocumentPreferences = (
     { setSubmitting, submitForm, setFieldValue },
   ) => {
     setSubmitting(true);
-    // try {
-    //   await dispatch(
-    //     onEditPartialBusiness({
-    //       // Include the necessary fields for onEditPartialBusiness
-    //       email: values.businessEmail,
-    //       businessName: businessInfo.businessName,
-    //       userId: user._id,
-    //       _id: user.businessId,
-    //     }),
-    //   );
-    // hideMessage()
-    // } catch (error) {
-    //   console.error('Error during onSubmit:', error);
-    // } finally {
-    //   setSubmitting(false);
-    // }
   };
 
   return (
@@ -138,8 +121,10 @@ const DocumentPreferences = (
                       handleSelectProposal(e.target.value);
                     }}
                   >
-                    {proposalStyles?.map((style, index ) => (
-                      <MenuItem key={index} value={style}>{style.type}</MenuItem>
+                    {proposalStyles?.map((style, index) => (
+                      <MenuItem key={index} value={style}>
+                        {style.type}
+                      </MenuItem>
                     ))}
                   </Select>
                   {/* If agreement is selected, show preview button */}
@@ -167,8 +152,10 @@ const DocumentPreferences = (
                       handleSelectAgreement(e.target.value);
                     }}
                   >
-                    {agreementStyles?.map((style, index ) => (
-                      <MenuItem key={index} value={style}>{style.type}</MenuItem>
+                    {agreementStyles?.map((style, index) => (
+                      <MenuItem key={index} value={style}>
+                        {style.type}
+                      </MenuItem>
                     ))}
                   </Select>
                 </AppCard>

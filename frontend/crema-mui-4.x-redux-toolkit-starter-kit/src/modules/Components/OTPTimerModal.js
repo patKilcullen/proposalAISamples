@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Box, Typography, Button, TextField } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import {  fetchError, verifyOtp } from 'toolkit/actions';
+import { fetchError, verifyOtp } from 'toolkit/actions';
 import PreviewModal from './PreviewModal';
 
 import ExitButton from './ExitButton';
@@ -21,11 +21,11 @@ const style = {
   p: 4,
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: "space-around",
-  gap: "20px",
+  justifyContent: 'space-around',
+  gap: '20px',
   alignItems: 'center',
   borderRadius: '20px',
-  padding: "50px"
+  padding: '50px',
 };
 
 const OTPTimer = ({
@@ -38,26 +38,28 @@ const OTPTimer = ({
   preview,
   content,
   resetSignature,
-   sendOtp
+  sendOtp,
 }) => {
   const dispatch = useDispatch();
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const [showExpired, setShowExpired] = useState(false);
+  const [openPreview, setOpenPreview] = useState(false);
 
   // SUBMIT THE PASSWORD - if verified onComplet funciton from parent
   const handleSubmitOtp = () => {
-    dispatch(verifyOtp(otp)).then((res) => {
-      if (res?.data?.success) {
-        onComplete();
-      } else {
-        setError(res);
-      }
-    }).catch((error)=>{
-   
-      console.log("Error Verifying OTP" + error)
-      dispatch(fetchError("Error Submitting OTP: " + error))
-    })
+    dispatch(verifyOtp(otp))
+      .then((res) => {
+        if (res?.data?.success) {
+          onComplete();
+        } else {
+          setError(res);
+        }
+      })
+      .catch((error) => {
+        console.log('Error Verifying OTP' + error);
+        dispatch(fetchError('Error Submitting OTP: ' + error));
+      });
   };
 
   // COUNTDOWN: if modal is open and time is left, count down
@@ -78,7 +80,7 @@ const OTPTimer = ({
   // CLOSE MODAL
   const handleClose = () => {
     setOpenTimer(false);
-    resetSignature()
+    resetSignature();
   };
 
   // INPUT OTP
@@ -97,12 +99,9 @@ const OTPTimer = ({
       .padStart(2, '0')}`;
   };
 
-  // OPEN PREVIEW of the contenct 
-  const [openPreview, setOpenPreview] = useState(false);
-
-  const handleResend = ()=>{
-    sendOtp()
-  }
+  const handleResend = () => {
+    sendOtp();
+  };
   return (
     <Modal
       open={openTimer}
@@ -110,9 +109,8 @@ const OTPTimer = ({
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
     >
-     
       <Box sx={style}>
-         <ExitButton onClose={handleClose} />
+        <ExitButton onClose={handleClose} />
         <Typography component='p' sx={{ fontSize: 16, fontWeight: 'bold' }}>
           A One Time Password was sent to your email inbox.
         </Typography>
@@ -131,13 +129,12 @@ const OTPTimer = ({
               OTP expires in: {formattedTime}
             </Typography>
           )}
-
         </Box>
- {/* RESEND OTP */}
-        <Button sx={{marginTop: "-20px"}}
-        onClick={handleResend}
-        >Resend OTP</Button>
-{/* OTP ERROR */}
+        {/* RESEND OTP */}
+        <Button sx={{ marginTop: '-20px' }} onClick={handleResend}>
+          Resend OTP
+        </Button>
+        {/* OTP ERROR */}
         <TextField
           name={'otp'}
           variant='outlined'
@@ -158,7 +155,7 @@ const OTPTimer = ({
           setOpenPreivew={setOpenPreview}
           content={content}
         />
-        
+
         <Typography sx={{ color: 'red', marginBottom: '5px' }}>
           {error}
         </Typography>

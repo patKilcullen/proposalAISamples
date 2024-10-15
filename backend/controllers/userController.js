@@ -9,6 +9,7 @@ import {
 import { compareString, hashString } from "../utils/index.js";
 import path from "path";
 import fs from "fs";
+
 // GET User
 export const getUser = async (req, res) => {
   try {
@@ -68,33 +69,30 @@ export const updateUserNEW = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const {profileUrl} = req.body
+    const { profileUrl } = req.body;
 
-        if (profileUrl) {
-          const base64Data = profileUrl.replace(/^data:image\/\w+;base64,/, ""); // Remove metadata prefix
-          const fileType = profileUrl.split(";")[0].split("/")[1]; // Extract file extension
+    if (profileUrl) {
+      const base64Data = profileUrl.replace(/^data:image\/\w+;base64,/, ""); // Remove metadata prefix
+      const fileType = profileUrl.split(";")[0].split("/")[1]; // Extract file extension
 
-          const fileName = `${Date.now()}.${fileType}`; // Generate a unique file name
-          const filePath = path.join("uploads/profileUrls/", fileName); // Define file path
+      const fileName = `${Date.now()}.${fileType}`; // Generate a unique file name
+      const filePath = path.join("uploads/profileUrls/", fileName); // Define file path
 
-          // Create directory
-          const directory = path.dirname(filePath);
-          if (!fs.existsSync(directory)) {
-            fs.mkdirSync(directory, { recursive: true });
-          }
+      // Create directory
+      const directory = path.dirname(filePath);
+      if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory, { recursive: true });
+      }
 
-          fs.writeFile(filePath, base64Data, "base64", (err) => {
-            if (err) {
-              console.error("Error saving the image:", err);
-              return res
-                .status(500)
-                .json({ message: "Error saving the image" });
-            }
-          });
-
-          req.body.profileUrl = `/uploads/profileUrls/${fileName}`; // Save the file path in the database
+      fs.writeFile(filePath, base64Data, "base64", (err) => {
+        if (err) {
+          console.error("Error saving the image:", err);
+          return res.status(500).json({ message: "Error saving the image" });
         }
+      });
 
+      req.body.profileUrl = `/uploads/profileUrls/${fileName}`; // Save the file path in the database
+    }
 
     const user = await User.findByIdAndUpdate(
       id,
@@ -108,31 +106,6 @@ export const updateUser = async (req, res, next) => {
         message: "User not found",
       });
     }
-
-
-    // if (profileUrl) {
-    //   const base64Data = profileUrl.replace(/^data:image\/\w+;base64,/, ""); // Remove metadata prefix
-    //   const fileType = profileUrl.split(";")[0].split("/")[1]; // Extract file extension
-
-    //   const fileName = `${Date.now()}.${fileType}`; // Generate a unique file name
-    //   const filePath = path.join("uploads/profileUrls/", fileName); // Define file path
-
-    //   // Create directory
-    //   const directory = path.dirname(filePath);
-    //   if (!fs.existsSync(directory)) {
-    //     fs.mkdirSync(directory, { recursive: true });
-    //   }
-
-    //   fs.writeFile(filePath, base64Data, "base64", (err) => {
-    //     if (err) {
-    //       console.error("Error saving the image:", err);
-    //       return res.status(500).json({ message: "Error saving the image" });
-    //     }
-    //   });
-
-    //   req.body.profileUrl = `/uploads/profileUrls/${fileName}`; // Save the file path in the database
-    // }
-
 
     res.status(200).json({
       success: true,
@@ -386,6 +359,7 @@ export const getUserContacts = async (req, res) => {
   }
 };
 
+// ADD CONTACTS
 export const addContacts = async (req, res) => {
   try {
     const { id } = req.user; // Assuming the user ID is stored in req.user
@@ -438,9 +412,10 @@ export const addContacts = async (req, res) => {
   }
 };
 
+// ADD PROPOSAL
 export const addProposal = async (req, res) => {
   try {
-    const { id } = req.user; 
+    const { id } = req.user;
     const { proposal } = req.body;
 
     const user = await User.findById(id).populate("proposals", "-__v");
@@ -463,4 +438,3 @@ export const addProposal = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-

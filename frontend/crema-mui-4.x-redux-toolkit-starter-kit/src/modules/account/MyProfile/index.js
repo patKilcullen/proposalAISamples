@@ -1,5 +1,4 @@
-
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
@@ -8,19 +7,13 @@ import Box from '@mui/material/Box';
 import IntlMessages from '@crema/helpers/IntlMessages';
 import { BiUser } from 'react-icons/bi';
 import { AiOutlineLock } from 'react-icons/ai';
-import { IoMdInformationCircleOutline } from 'react-icons/io';
-import { IoShareSocialOutline } from 'react-icons/io5';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import AppAnimate from '@crema/components/AppAnimate';
 import { Fonts } from '@crema/constants/AppEnums';
-import FindProposal from '../../Projects/FindProposal';
 import { useAuthUser } from '@crema/hooks/AuthHooks';
 import BusinessInfo from '../../business/BusinessInfo';
 import AccountTabsWrapper from './AccountTabsWrapper';
-import Information from './Information';
-import Notification from './Notification';
-import PersonalInfo from './PersonalInfo'
-import ChangePassword from './ChangePassword/ChangePasswordRequest'
+import PersonalInfo from './PersonalInfo';
+import ChangePassword from './ChangePassword/ChangePasswordRequest';
 import BusinessIcon from '@mui/icons-material/Business';
 
 function a11yProps(index) {
@@ -32,22 +25,21 @@ function a11yProps(index) {
 
 const Account = () => {
   const { user } = useAuthUser();
+  const navigate = useNavigate();
+  const [value, setValue] = React.useState(0);
 
-const navigate = useNavigate()
+  // in onbaording not complete, route to onboarding
+  useEffect(() => {
+    if (!user?.businessId?.onboardingComplete) {
+      navigate('/business-onboarding');
+    }
+  }, []);
 
-useEffect(() => {
-
-      if (!user?.businessId?.onboardingComplete) {
-        navigate('/business-onboarding');
-      }
-}, []);
-
-
-    const [value, setValue] = React.useState(0);
-
+  // Tab change
   const onTabsChange = (event, newValue) => {
     setValue(newValue);
   };
+
   // My account tabs
   const tabs = [
     {
@@ -58,32 +50,13 @@ useEffect(() => {
     {
       id: 2,
       icon: <BusinessIcon />,
-       name: (
-        <IntlMessages
-          id={'Business Info'}
-        />
-      ),
+      name: <IntlMessages id={'Business Info'} />,
     },
     {
       id: 3,
       icon: <AiOutlineLock />,
       name: <IntlMessages id='common.changePassword' />,
     },
-    // {
-    //   id: 4,
-    //   icon: <IoMdInformationCircleOutline />,
-    //   name: <IntlMessages id='common.information' />,
-    // },
-    // {
-    //   id: 5,
-    //   icon: <IoShareSocialOutline />,
-    //   name: <IntlMessages id='common.social' />,
-    // },
-    // {
-    //   id: 6,
-    //   icon: <NotificationsNoneIcon />,
-    //   name: <IntlMessages id='healthCare.notification' />,
-    // },
   ];
   return (
     <>
@@ -127,8 +100,10 @@ useEffect(() => {
         <AppAnimate animation='transition.slideRightIn' delay={300}>
           <Box className='account-tabs-content'>
             {value === 0 && <PersonalInfo />}
-  {value === 1 && <BusinessInfo />}
-            {value === 2 && <ChangePassword message={"Send Password Reset Link"}/>}
+            {value === 1 && <BusinessInfo />}
+            {value === 2 && (
+              <ChangePassword message={'Send Password Reset Link'} />
+            )}
             {/* {value === 3 && <Information />} */}
             {/* {value === 4 && <Notification />} */}
           </Box>

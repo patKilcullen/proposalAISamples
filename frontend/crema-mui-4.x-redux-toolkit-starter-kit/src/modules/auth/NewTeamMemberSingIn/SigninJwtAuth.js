@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import { Checkbox, Typography } from '@mui/material';
 import { Form, Formik } from 'formik';
 import * as yup from 'yup';
-
 import AppInfoView from '@crema/components/AppInfoView';
 import { Link, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
@@ -15,13 +14,8 @@ import AppTextField from '@crema/components/AppFormComponents/AppTextField';
 import { useAuthMethod } from '@crema/hooks/AuthHooks';
 import { Fonts } from '@crema/constants/AppEnums';
 import AuthWrapper from '../AuthWrapper';
-
-import  { useInfoViewActionsContext,
-
-} from '@crema/context/AppContextProvider/InfoViewContextProvider';
-
+import { useInfoViewActionsContext } from '@crema/context/AppContextProvider/InfoViewContextProvider';
 import jwtAxios from '@crema/services/auth/jwt-auth';
-
 import { fetchError } from 'toolkit/actions';
 
 const validationSchema = yup.object({
@@ -35,30 +29,25 @@ const validationSchema = yup.object({
 });
 
 const SigninJwtAuth = () => {
-
   const navigate = useNavigate();
   const { signInUser, signInNewTeamMember } = useAuthMethod();
   const { uid } = useParams();
-  const dispatch = useDispatch()
-  // FETCH CONTEXT 
-// const { fetchError } = useInfoViewActionsContext();
+  const dispatch = useDispatch();
   const [user, setUser] = useState({});
+
+
   useEffect(() => {
     const getUser = async () => {
-         try{
-      const res = await jwtAxios.get(`/users/get/${uid}`);
-      setUser(res.data.user);
-         }
-         catch(error){
-         dispatch(fetchError("Something went wrong")) 
-         }
+      try {
+        const res = await jwtAxios.get(`/users/get/${uid}`);
+        setUser(res.data.user);
+      } catch (error) {
+        dispatch(fetchError('Something went wrong'));
+      }
     };
     getUser();
   }, [uid]);
 
-  const onGoToForgetPassword = () => {
-    navigate('/forget-password', { tab: 'jwtAuth' });
-  };
 
   const { messages } = useIntl();
 
@@ -193,12 +182,11 @@ const SigninJwtAuth = () => {
         </Box>
 
         {/* FETCH CONTEXT */}
-      <AppInfoView type='context' />
-         {/* <AppInfoView /> */}
+        <AppInfoView type='context' />
+        {/* <AppInfoView /> */}
       </Box>
     </AuthWrapper>
   );
 };
 
 export default SigninJwtAuth;
-

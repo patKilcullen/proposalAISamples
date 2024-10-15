@@ -63,8 +63,10 @@ export default function Signature({
 }) {
   const { user } = useAuthUser();
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
   const { loading_otp, message } = useSelector(({ common }) => common);
+  const [open, setOpen] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(900000);
+
   // SEND ONE TIME PASSWORD/OPEN TIMER
   const sendOtp = async () => {
     dispatch(oneTimePassword())
@@ -74,7 +76,6 @@ export default function Signature({
         }
       })
       .catch((error) => {
-    
         dispatch(fetchError('Error sending OTP: ' + error));
       });
   };
@@ -85,13 +86,13 @@ export default function Signature({
     setEditorContent(content);
   }, [content]);
 
-  //   // FORM SECTION: determines and changes the current section (signature, stakeholders) of the from
+  //FORM SECTION: determines and changes the current section (signature, stakeholders) of the from
   const [activeSection, setActiveSection] = useState('sign');
   const handleSectionChange = (section) => {
     setActiveSection(section);
   };
 
-  //   // FORM SECTION: determines and changes the signture type form
+  // FORM SECTION: determines and changes the signture type form
   const [signatureType, setSignatureType] = useState('draw');
   const handleSignatureChange = (section) => {
     setSignatureType(section);
@@ -112,8 +113,8 @@ export default function Signature({
     resetSignature();
   };
 
+  // DATE
   const date = new Date(Date.now());
-
   const fullDate = `${date.getMonth() + 1}/${date.getDate()}/${
     date.getFullYear() % 100
   }`;
@@ -144,9 +145,6 @@ export default function Signature({
         contentContainerRef.current.scrollHeight;
     }
   };
-
-  // ONE TIME PASSWORD TIME LIMIT
-  const [timeLeft, setTimeLeft] = useState(900000);
 
   // ON COMPLETE ONE TIME PASSWORD: if admin/business, complete proposal, if client, send Clioent Signature to business
   const onComplete = () => {
@@ -304,7 +302,7 @@ export default function Signature({
               preview={'Preview Signature'}
               content={ReactHtmlParser(editorContent)}
               resetSignature={resetSignature}
-               sendOtp={sendOtp}
+              sendOtp={sendOtp}
             />
           </Box>
         </Modal>

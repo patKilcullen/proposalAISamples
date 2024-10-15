@@ -7,24 +7,17 @@ import PropTypes from 'prop-types';
 import AppTextField from '@crema/components/AppFormComponents/AppTextField';
 import AppSelectField from '@crema/components/AppFormComponents/AppSelectField';
 import EditIcon from '@mui/icons-material/Edit';
-
 import { Fonts } from '@crema/constants/AppEnums';
-
 import AppCard from '@crema/components/AppCard';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-
 import AppAnimate from '@crema/components/AppAnimate';
-
 import { useAuthUser } from '@crema/hooks/AuthHooks';
-
 import AppInfoView from '@crema/components/AppInfoView';
 import FormHelperText from '@mui/material/FormHelperText';
-
 import UploadLogo from 'modules/Components/reactDropzone/UploadLogo';
-
 import Avatar from '@mui/material/Avatar';
-// TODO ADD INDUSTRIES FOLDER TO BE USED throughout app
+
 //  Industries
 const predefinedIndustries = [
   'Consulting Services',
@@ -75,8 +68,7 @@ const CreateBusinessForm = ({
     if (!changeProposalBusinessInfo && !clientBusiness) {
       setFieldValue(
         'businessName',
-         businessInfo ? businessInfo.businessName : '',
-       
+        businessInfo ? businessInfo.businessName : '',
       );
       setFieldValue(
         'businessType',
@@ -116,10 +108,7 @@ const CreateBusinessForm = ({
         'businessRepEmail',
         businessInfo ? businessInfo.businessRepEmail : '',
       );
-      setFieldValue(
-        'tin',
-        businessInfo ? businessInfo.tin : '',
-      );
+      setFieldValue('tin', businessInfo ? businessInfo.tin : '');
     }
   }, [businessInfo, setFieldValue]);
 
@@ -146,14 +135,12 @@ const CreateBusinessForm = ({
   );
 
   return (
-    // <AppAnimate animation='transition.slideUpIn'>
     <>
       <Form
         ref={componentRef}
         style={{
           overflowY: 'auto',
           height: '90vh',
-          // width: '50vw',
           minWidth: createProposal && '50vw',
         }}
         noValidate
@@ -161,7 +148,6 @@ const CreateBusinessForm = ({
       >
         <Box
           sx={{
-            //  position: 'absolute',
             marginLeft: '87%',
             marginTop: !businessInfo && !createProposal ? '10px' : '-10px',
           }}
@@ -172,7 +158,6 @@ const CreateBusinessForm = ({
             <Box
               style={{
                 width: '100%',
-                // position: businessInfo && !createProposal ? 'absolute' : "relative",
                 display: 'flex',
                 justifuContent: 'flex-end',
               }}
@@ -183,8 +168,6 @@ const CreateBusinessForm = ({
                     ml: businessInfo
                       ? '0'
                       : { xs: 0, sm: '65vw', md: '75%', lg: '80%' },
-                    // marginTop:
-                    // businessInfo && !createProposal ? '40px' : '40px',
                     marginTop: '40px',
                     height: '40px',
                   }}
@@ -214,8 +197,8 @@ const CreateBusinessForm = ({
             businessInfo
               ? 'My Business Information'
               : clientBusiness
-              ? 'Client Business Information'
-              : 'Create Business'
+                ? 'Client Business Information'
+                : 'Create Business'
           }
         >
           <Box>
@@ -271,7 +254,6 @@ const CreateBusinessForm = ({
                 const value = e.target.value;
                 setFieldValue(fieldName, value);
               }}
-            
               disabled={businessInfo && !editMode}
             >
               <MenuItem value='Sole Proprietorship'>
@@ -299,23 +281,19 @@ const CreateBusinessForm = ({
               <MenuItem value='Benefit Corporation'>
                 Benefit Corporation
               </MenuItem>
-                 
-            
             </Select>
- <Box sx={{ mt:-2, ml: 4}}> 
- <ErrorMessage 
-              name={
-               clientBusiness ? 'clientBusinessType' : 'businessType'
-              }
-              component={errorHelper}
-            /></Box>
+            <Box sx={{ mt: -2, ml: 4 }}>
+              <ErrorMessage
+                name={clientBusiness ? 'clientBusinessType' : 'businessType'}
+                component={errorHelper}
+              />
+            </Box>
             <Box component='p' sx={{ fontSize: 16 }}>
               Industry
             </Box>
 
             <Select
               label='Industry'
-              // name='industry'
               name={
                 clientBusiness ? 'clientBusinessIndustry' : 'businessIndustry'
               }
@@ -325,7 +303,6 @@ const CreateBusinessForm = ({
                   ? user.businessId?.industry
                   : selectedIndustry
               }
-              // defaultValue={!clientBusiness && !selectedIndustry ? user?.businessId?.industry : ""}
               defaultValue={
                 !clientBusiness && !selectedIndustry
                   ? user?.businessId?.industry
@@ -373,14 +350,14 @@ const CreateBusinessForm = ({
                 }}
               />
             )}
-            <Box sx={{ ml: 4}}> 
-            <ErrorMessage
-              name={
-                clientBusiness ? 'clientBusinessIndustry' : 'businessIndustry'
-              }
-              component={errorHelper}
-            />
-</Box>
+            <Box sx={{ ml: 4 }}>
+              <ErrorMessage
+                name={
+                  clientBusiness ? 'clientBusinessIndustry' : 'businessIndustry'
+                }
+                component={errorHelper}
+              />
+            </Box>
             <Box component='p' sx={{ mt: 3, fontSize: 16 }}>
               Overview
             </Box>
@@ -502,24 +479,26 @@ const CreateBusinessForm = ({
               disabled={businessInfo && !editMode}
             />
 
-            {!createProposal && !clientBusiness && <><Box component='p' sx={{ fontSize: 16 }}>
-                    Tax Identification Number(TIN){' '}
-                    <Box component='p' sx={{ fontSize: 16, color: 'grey' }}>
-                    </Box>
-                  </Box>
-                  <AppTextField
-                    name='tin'
-                    variant='outlined'
-                    sx={{
-                      width: '100%',
-                      my: 2,
-                    }}
-                    placeholder='tax id'
-                      disabled={businessInfo && !editMode}
-                  /></>}
+            {!createProposal && !clientBusiness && (
+              <>
+                <Box component='p' sx={{ fontSize: 16 }}>
+                  Tax Identification Number(TIN){' '}
+                  <Box component='p' sx={{ fontSize: 16, color: 'grey' }}></Box>
+                </Box>
+                <AppTextField
+                  name='tin'
+                  variant='outlined'
+                  sx={{
+                    width: '100%',
+                    my: 2,
+                  }}
+                  placeholder='tax id'
+                  disabled={businessInfo && !editMode}
+                />
+              </>
+            )}
 
             {/* REPRESENTATIVE INFORMATIOM */}
-
             <AppCard
               title={
                 clientBusiness
@@ -531,8 +510,6 @@ const CreateBusinessForm = ({
                 sx={{
                   display: 'flex',
                   flexDirection: 'column',
-                  // createProposal || clientBusiness ? 'row' : 'column',
-                  // gap: createProposal || clientBusiness ? '80px' : '10px',
                   gap: '10px',
                   flexWrap: 'wrap',
                   width: '80%',
@@ -573,7 +550,6 @@ const CreateBusinessForm = ({
                       my: 2,
                     }}
                     placeholder='Rep Role'
-                    // value={businessInfo ? businessInfo.url : ''}
                     onChange={(e) =>
                       setFieldValue(
                         clientBusiness ? 'clientRepRole' : 'businessRepRole',
@@ -597,7 +573,6 @@ const CreateBusinessForm = ({
                       my: 2,
                     }}
                     placeholder='Rep Email'
-                    // value={businessInfo ? businessInfo.url : ''}
                     onChange={(e) =>
                       setFieldValue(
                         clientBusiness ? 'clientRepEmail' : 'businessRepEmail',
@@ -615,19 +590,13 @@ const CreateBusinessForm = ({
                     alignItems: 'center',
                     gap: '10px',
                     position: 'relative',
-                    my: 5
+                    my: 5,
                   }}
                 >
                   <Box component='p' sx={{ fontSize: 16 }}>
                     Logo
                   </Box>
-                  <Box
-                    sx={{
-                      // display: 'flex',
-                      // justifyContent: 'center',
-                      // flexGrow: 1,
-                    }}
-                  >
+                  <Box>
                     <Avatar
                       sx={{
                         width: 100,

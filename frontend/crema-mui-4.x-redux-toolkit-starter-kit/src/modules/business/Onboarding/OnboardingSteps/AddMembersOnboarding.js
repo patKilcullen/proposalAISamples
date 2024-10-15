@@ -1,36 +1,26 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react';
 
-import AddTeamMembers from '../../../teamManagement/AddTeamMembersPage'
- import AppInfoView from '@crema/components/AppInfoView';
+import AddTeamMembers from '../../../teamManagement/AddTeamMembersPage';
+import AppInfoView from '@crema/components/AppInfoView';
 const AddMembersOnboarding = ({
   onboardingSave,
   setOnboardingSave,
-  businessInfo,
   handleNext,
-  setFormError,
-  setFormErrors,
 }) => {
-
-
-
-      useEffect(() => {
-        if (onboardingSave === true) {
-        //   if (formikRef.current.isValid) {
-        //     formikRef.current.submitForm();
-            handleNext();
-        //     setFormError(false);
-        //   } else {
-        //     setFormError(true);
-        //   }
-        }
-        setOnboardingSave(false);
-      }, [onboardingSave]);
+  
+  // NEXT ONBOARDING
+  useEffect(() => {
+    if (onboardingSave === true) {
+      handleNext();
+    }
+    setOnboardingSave(false);
+  }, [onboardingSave]);
   return (
     <>
       <AddTeamMembers />
-         <AppInfoView />
-         </>
+      <AppInfoView />
+    </>
   );
 };
 
-export default AddMembersOnboarding
+export default AddMembersOnboarding;

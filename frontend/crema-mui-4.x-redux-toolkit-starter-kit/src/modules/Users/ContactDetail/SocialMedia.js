@@ -45,7 +45,9 @@ const SocialMedia = (props) => {
               color: (theme) => theme.palette.text.secondary,
             }}
           />
-          <AppTooltip title={contact.facebookId || <IntlMessages id="common.na" />}>
+          <AppTooltip
+            title={contact.facebookId || <IntlMessages id='common.na' />}
+          >
             <Box
               sx={{
                 ml: 2,
@@ -56,7 +58,11 @@ const SocialMedia = (props) => {
                 textOverflow: 'ellipsis',
               }}
             >
-              {contact.facebookId ? contact.facebookId : <IntlMessages id="common.na" />}
+              {contact.facebookId ? (
+                contact.facebookId
+              ) : (
+                <IntlMessages id='common.na' />
+              )}
             </Box>
           </AppTooltip>
         </Box>
@@ -72,7 +78,9 @@ const SocialMedia = (props) => {
               color: (theme) => theme.palette.text.secondary,
             }}
           />
-          <AppTooltip title={contact.twitterId || <IntlMessages id="common.na" />}>
+          <AppTooltip
+            title={contact.twitterId || <IntlMessages id='common.na' />}
+          >
             <Box
               sx={{
                 ml: 2,
@@ -83,7 +91,11 @@ const SocialMedia = (props) => {
                 textOverflow: 'ellipsis',
               }}
             >
-              {contact.twitterId ? contact.twitterId : <IntlMessages id="common.na" />}
+              {contact.twitterId ? (
+                contact.twitterId
+              ) : (
+                <IntlMessages id='common.na' />
+              )}
             </Box>
           </AppTooltip>
         </Box>

@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 
 
 
-const OnboardingSideBar = ({steps, handleNext, handleBack, activeStep, setActiveStep}) => {
+const OnboardingSideBar = ({steps, activeStep, }) => {
 // CURRENT STEP: ref assocaited with the active step
   const [currentStepRef, setCurrentStepRef] = useState(null);
 
@@ -39,30 +39,13 @@ const OnboardingSideBar = ({steps, handleNext, handleBack, activeStep, setActive
               key={step.label}
               ref={(ref) => index === activeStep && setCurrentStepRef(ref)}
               sx={{
-                // boxShadow:
-                //   index === activeStep ? '2px 5px' : null,
-                // height: index === activeStep ? '15vh' : '7vh',
                 fontWeight: index === activeStep ? 'bold' : null,
                 fontSize: index === activeStep ? '50px' : null,
-                // marginBottom: '-20px',
-                
               }}
             >
-              <StepLabel
-                // optional={
-                //   index === steps.length - 1 ? (
-                //     <Typography variant='caption'>Last step</Typography>
-                //   ) : null
-                // }
-              >
+              <StepLabel>
                 {step.label}
               </StepLabel>
-              {/* <StepContent>
-                <Typography>
-                  {step.description}
-    
-                </Typography>
-              </StepContent> */}
             </Step>
           ))}
       </Stepper>

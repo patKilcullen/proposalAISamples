@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import mongoose from "mongoose";
 import path from "path";
 import fs from "fs";
+
 // GET ALL Businesses
 export const getAllBusiness = async (req, res) => {
   try {
@@ -26,31 +27,30 @@ export const getAllBusiness = async (req, res) => {
 export const createBusiness = async (req, res) => {
   try {
     const user = req.user;
-    const {logo} = req.body
+    const { logo } = req.body;
 
+    if (logo) {
+      const base64Data = logo.replace(/^data:image\/\w+;base64,/, ""); // Remove metadata prefix
+      const fileType = logo.split(";")[0].split("/")[1]; // Extract file extension
 
-      if (logo) {
-        const base64Data = logo.replace(/^data:image\/\w+;base64,/, ""); // Remove metadata prefix
-        const fileType = logo.split(";")[0].split("/")[1]; // Extract file extension
+      const fileName = `${Date.now()}.${fileType}`; // Generate a unique file name
+      const filePath = path.join("uploads/logos/", fileName); // Define file path
 
-        const fileName = `${Date.now()}.${fileType}`; // Generate a unique file name
-        const filePath = path.join("uploads/logos/", fileName); // Define file path
-
-        // Create directory
-        const directory = path.dirname(filePath);
-        if (!fs.existsSync(directory)) {
-          fs.mkdirSync(directory, { recursive: true });
-        }
-
-        fs.writeFile(filePath, base64Data, "base64", (err) => {
-          if (err) {
-            console.error("Error saving the image:", err);
-            return res.status(500).json({ message: "Error saving the image" });
-          }
-        });
-
-        req.body.logo = `/uploads/logos/${fileName}`; // Save the file path in the database
+      // Create directory
+      const directory = path.dirname(filePath);
+      if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory, { recursive: true });
       }
+
+      fs.writeFile(filePath, base64Data, "base64", (err) => {
+        if (err) {
+          console.error("Error saving the image:", err);
+          return res.status(500).json({ message: "Error saving the image" });
+        }
+      });
+
+      req.body.logo = `/uploads/logos/${fileName}`; // Save the file path in the database
+    }
 
     const newBusiness = new Business(req.body);
 

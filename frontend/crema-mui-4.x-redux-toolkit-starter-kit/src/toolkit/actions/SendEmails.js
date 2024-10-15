@@ -14,19 +14,16 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 // SEND PROPOSAL
 export const onSendProposal = ({ proposal, role }) => {
   const { messages } = appIntl();
-
   return async (dispatch) => {
     dispatch({
       type: FETCH_START,
       message: `Sending Proposal to ${proposal.clientEmail}... `,
     });
-
     try {
       const response = await jwtAxios.post(`business/proposal/send-link`, {
         proposal,
         role,
       });
-
       if (response.status === 200) {
         dispatch({
           type: FETCH_SUCCESS,
@@ -108,10 +105,8 @@ export const onSendUserInvite = ({
 // SAVE PDF
 export const onSavePdf = (proposal) => {
   const { messages } = appIntl();
-
   return async (dispatch) => {
     dispatch({ type: FETCH_START, message: 'Creating Proposal PDF...' });
-
     try {
       const response = await jwtAxios.post(
         `business/proposal/save-pdf/${proposal.id}`,
@@ -140,18 +135,16 @@ export const onSavePdf = (proposal) => {
   };
 };
 
+
 // SEND PDF
 export const onSendPdf = (proposal) => {
   const { messages } = appIntl();
-
   return async (dispatch) => {
     dispatch({ type: FETCH_START, message: 'Sending Proposal PDF...' });
-
     try {
       const response = await jwtAxios.post(`business/proposal/send-pdf`, {
         proposal,
       });
-
       if (response.status === 200) {
         dispatch({ type: FETCH_SUCCESS });
         return response.data;
@@ -201,6 +194,7 @@ export const onSendNewMemberEmail = createAsyncThunk(
   },
 );
 
+// SEND VERIFICATION EMAIL
 export const sendVerificationEmail = (user) => {
   return (dispatch) => {
     const { messages } = appIntl();
@@ -231,6 +225,7 @@ export const sendVerificationEmail = (user) => {
   };
 };
 
+//REQUEST PASSWORD RESET
 export const requestPasswordReset = (user) => {
   return (dispatch) => {
     const { messages } = appIntl();
@@ -252,11 +247,11 @@ export const requestPasswordReset = (user) => {
   };
 };
 
+// RESET PASSWORD
 export const resetPassword = ({ userId, token }) => {
   return (dispatch) => {
     const { messages } = appIntl();
     dispatch({ type: FETCH_START });
-
     return jwtAxios
       .get(`/users/reset-password/${userId}/${token}`)
       .then((response) => {
@@ -274,11 +269,11 @@ export const resetPassword = ({ userId, token }) => {
   };
 };
 
+// CHANGE PASSOWRD
 export const changePassword = ({ userId, password }) => {
   return (dispatch) => {
     const { messages } = appIntl();
     dispatch({ type: FETCH_START });
-
     return jwtAxios
       .post(`/users/reset-password/${userId}`, {
         password,
@@ -301,6 +296,7 @@ export const changePassword = ({ userId, password }) => {
   };
 };
 
+// ONE TIME PASSWORD
 export const oneTimePassword = () => {
   return (dispatch) => {
     const { messages } = appIntl();
@@ -334,10 +330,10 @@ export const oneTimePassword = () => {
   };
 };
 
+// VERIFY ONE TIME PASSWORD
 export const verifyOtp = (otp) => {
   return (dispatch) => {
     const { messages } = appIntl();
-
     return jwtAxios
       .post(`business/proposal/verify-otp`, { otp })
       .then((response) => {
@@ -364,12 +360,11 @@ export const verifyOtp = (otp) => {
   };
 };
 
+//  VERIFY PROPOSAL
 export const verifyProposal = (proposal) => {
   return (dispatch) => {
     const { messages } = appIntl();
-
     return jwtAxios
-
       .post(`/business/proposal/verify-proposal`, proposal)
       .then((response) => {
         if (response.status === 201) {
@@ -396,7 +391,7 @@ export const verifyProposal = (proposal) => {
 };
 
 
-
+// SEND SUPPORT A MESSAGE
 export const onSendSupportMessage = ({message, subject}) => {
   return (dispatch) => {
     const { messages } = appIntl();

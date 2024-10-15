@@ -32,15 +32,18 @@ const ContactDetail = (props) => {
     pid,
     businessType,
   } = props;
-
   const dispatch = useDispatch();
-  const [contact, setContact] = useState(selectedContact);
   const { fetchError } = useInfoViewActionsContext();
+  const [contact, setContact] = useState(selectedContact);
+  const [openRemoveUser, setOpenRemoveUser] = useState(false);
+  const [openReassingUser, setReassignUSer] = useState(false);
+
+  // SET CONTACT
   useEffect(() => {
     setContact(selectedContact);
   }, [selectedContact]);
 
-  const [openReassingUser, setReassignUSer] = useState(false);
+  // REASSIGN
   const onHandleReassignUser = () => {
     setReassignUSer(true);
   };
@@ -48,8 +51,7 @@ const ContactDetail = (props) => {
     setReassignUSer(false);
   };
 
-  const [openRemoveUser, setOpenRemoveUser] = useState(false);
-
+  // REMOVE USEr
   const handleRemoveUser = () => {
     setOpenRemoveUser(true);
   };
@@ -58,7 +60,6 @@ const ContactDetail = (props) => {
   };
 
   const removeUser = () => {
- 
     if (role.role) {
       try {
         if (role.role === 'businessCollaborator') {
@@ -114,8 +115,8 @@ const ContactDetail = (props) => {
                 alignItems: 'center',
               }}
             >
-                      {/* PICTURE/AVATAR */}
-            {/* if admin and has logo(for business) display that, othewise if user has profile pic,
+              {/* PICTURE/AVATAR */}
+              {/* if admin and has logo(for business) display that, othewise if user has profile pic,
             display that, otherwith get backgroun color from name */}
               {contact.logo ? (
                 <Avatar
@@ -124,7 +125,7 @@ const ContactDetail = (props) => {
                     height: 80,
                     mb: 2.5,
                   }}
-                    src={`${process.env.REACT_APP_SERVER_URL}${contact.logo}`}
+                  src={`${process.env.REACT_APP_SERVER_URL}${contact.logo}`}
                 />
               ) : contact.profileUrl ? (
                 <Avatar
@@ -133,9 +134,9 @@ const ContactDetail = (props) => {
                     height: 80,
                     mb: 2.5,
                   }}
-                    src={`${process.env.REACT_APP_SERVER_URL}${contact.profileUrl}`}
+                  src={`${process.env.REACT_APP_SERVER_URL}${contact.profileUrl}`}
                 />
-              ) :(
+              ) : (
                 <Avatar
                   sx={{
                     width: 80,

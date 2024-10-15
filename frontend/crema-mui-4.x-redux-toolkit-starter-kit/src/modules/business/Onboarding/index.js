@@ -6,13 +6,15 @@ import OnboardingSideBar from './OnboardingSideBar';
 import OnboardingContent from './OnboardingContent';
 import { fetchError, onGetBusinessInfo } from '../../../toolkit/actions';
 
- import { useJWTAuthActions } from '@crema/services/auth/jwt-auth/JWTAuthProvider';
+import { useJWTAuthActions } from '@crema/services/auth/jwt-auth/JWTAuthProvider';
 
- import AppInfoView from '@crema/components/AppInfoView';
+import AppInfoView from '@crema/components/AppInfoView';
 
 const steps = [
-   { label: 'User Profile Setup', description: 'User Profile Setup' },
+  { label: 'User Profile Setup', description: 'User Profile Setup' },
   { label: 'Business Profile Setup', description: 'Business Profile Setup' },
+  { label: 'Dashboard Tour', description: 'Dashboard Tour' },
+  // POTENTIAL OTHER STEPS
   // { label: 'Add Team Members', description: 'Add Team Members' },
   // { label: 'Legal Information', description: 'Legal Information' },
   // { label: 'Document Preferences', description: 'Document Preferences' },
@@ -21,17 +23,16 @@ const steps = [
   //   label: 'Agreement Terms and Conditions',
   //   description: 'Agreement Terms and Conditions',
   // },
-  { label: 'Dashboard Tour', description: 'Dashboard Tour' },
   // { label: 'Confirmation & Welcome', description: 'Confirmation & Welcome' },
 ];
 
 const OnboardingIndex = () => {
   const { user } = useAuthUser();
-  
-    const { getAuthUser } = useJWTAuthActions();
+
+  const { getAuthUser } = useJWTAuthActions();
   const dispatch = useDispatch();
   const business = useSelector(({ business }) => business.singleBusiness);
-  
+
   const [onboardingStep, setOnbaordingStep] = useState(0);
   const [onboardingComplete, setOnboardingComplete] = useState(false);
   //  ACTIVE STEP for when onboarding complete is false and true
@@ -43,21 +44,19 @@ const OnboardingIndex = () => {
   // GET BUSINESS... get business so it can be accessible in all children/Steps
   // ensure it has a businessId first ( uthUser in signUpBusiness is delaye)
   useEffect(() => {
-  if(user.businessId){
-   try{
-dispatch(onGetBusinessInfo(user?.businessId?._id));
-
-   }catch(error){
-    fetchError(error)
-   }
-    
-  }
+    if (user.businessId) {
+      try {
+        dispatch(onGetBusinessInfo(user?.businessId?._id));
+      } catch (error) {
+        fetchError(error);
+      }
+    }
   }, [user.businessId]);
 
   // When user agree to terms(name in databsae should be changed), set onboarding complete
   // and handleReset, set stepper to 0. This keeps user from navigating to previous onboarding stepper steps
   useEffect(() => {
-          if (business.onboardingComplete) {
+    if (business.onboardingComplete) {
       setOnboardingComplete(true);
     }
   }, [business]);
@@ -105,9 +104,8 @@ dispatch(onGetBusinessInfo(user?.businessId?._id));
         handleNext={handleNext}
         handleBack={handleBack}
         handleReset={handleReset}
-
       />
-         <AppInfoView />
+      <AppInfoView />
     </AppsContainer>
   );
 };

@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { Fonts } from '@crema/constants/AppEnums';
 
 import CreateBusinessForm from './CreateBusinessForm';
 import JoinBusinessForm from './JoinBusinessForm';

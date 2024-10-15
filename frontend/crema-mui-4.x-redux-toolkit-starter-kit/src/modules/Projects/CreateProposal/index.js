@@ -5,13 +5,7 @@ import { Fonts } from '@crema/constants/AppEnums';
 import { Box } from '@mui/material';
 import ProposalContent from './Content';
 import { Formik, Form } from 'formik';
-
 import { useNavigate } from 'react-router-dom';
-
-import AppInfoView from '@crema/components/AppInfoView';
-
-// FETCH CONTEXT
-import { useInfoViewActionsContext } from '@crema/context/AppContextProvider/InfoViewContextProvider';
 
 // ACTIONS
 import {
@@ -28,10 +22,12 @@ import {
   getSingleProposal,
 } from '../../../toolkit/actions';
 
-// import {fetchError} from 'toolkit/reducers'
 import DOMPurify from 'dompurify';
 import { useAuthUser } from '@crema/hooks/AuthHooks';
 import * as yup from 'yup';
+
+// TODO: put all test info in folder
+// TEST INFO
 const testInfo = {
   title: 'AI-Powered E-Commerce Solutions for Google’s Retail Platform',
   scopeOfWork: `MixCommerce will design and implement a comprehensive AI-driven e-commerce platform tailored to Google’s retail operations. The platform will focus on enhancing customer experience through personalized product recommendations, streamlined checkout processes, and advanced inventory management systems. This collaboration aims to revolutionize Google’s retail platform by leveraging AI technology for superior user engagement and optimized sales strategies.`,
@@ -75,52 +71,23 @@ The pricing includes development, implementation, and post-launch support for th
 2. Grant MixCommerce access to relevant systems and data necessary for development.
 3. Designate a project manager for regular communication and decision-making.
 4. Ensure internal teams are available for testing and feedback during the beta phase.`,
-  previousSuccessStory: `MixCommerce partnered with a major retail brand to integrate AI technology into their e-commerce platform. Our solution increased conversion rates by 20% within the first quarter post-launch, reduced cart abandonment by 15%, and improved inventory turnover by 30%. This successful collaboration resulted in continued business growth and a long-term partnership with the client, solidifying MixCommerce’s position as a leader in AI-powered e-commerce solutions.`
+  previousSuccessStory: `MixCommerce partnered with a major retail brand to integrate AI technology into their e-commerce platform. Our solution increased conversion rates by 20% within the first quarter post-launch, reduced cart abandonment by 15%, and improved inventory turnover by 30%. This successful collaboration resulted in continued business growth and a long-term partnership with the client, solidifying MixCommerce’s position as a leader in AI-powered e-commerce solutions.`,
 };
-
-
-// const testInfo = {
-//   businessOverview:
-//     "Google LLC (/ˈɡuːɡəl/ ⓘ GOO-ghəl) is an American multinational technology company focusing on online advertising, search engine technology, cloud computing, computer software, quantum computing, e-commerce, consumer electronics artificial intelligence,[9]. It has been referred to as 'the most powerful company in the world'[10] and as one of the world's most valuable brands due to its market dominance, data collection, and technological advantages in the field of artificial intelligence.[11][12][13] Google's parent company Alphabet Inc. is one of the five Big Tech companies, alongside Amazon, Apple, Meta, and Microsoft. Google was founded on September 4, 1998, by American computer scientists Larry Page and Sergey Brin while they were PhD students at Stanford University in California. Together they own about 14% of its publicly listed shares and control 56% of its stockholder voting power through super-voting stock. The company went public via an initial public offering (IPO) in 2004. In 2015, Google was reorganized as a wholly owned subsidiary of Alphabet Inc. Google is Alphabet's largest subsidiary and is a holding company for Alphabet's internet properties and interests. Sundar Pichai was appointed CEO of Google on October 24, 2015, replacing Larry Page, who became the CEO of Alphabet. On December 3, 2019, Pichai also became the CEO of Alphabet.[14] The company has since rapidly grown to offer a multitude of products and services beyond Google Search, many of which hold dominant market positions. These products address a wide range of use cases, including email (Gmail), navigation (Waze & Maps), cloud computing (Cloud), web browsing (Chrome), video sharing (YouTube), productivity (Workspace), operating systems (Android), cloud storage (Drive), language translation (Translate), photo storage (Photos), video calling (Meet), smart home (Nest), smartphones (Pixel), wearable technology (Pixel Watch & Fitbit), music streaming (YouTube Music), video on demand (YouTube TV), artificial intelligence ",
-//   scopeOfWork:
-//     '1. Running advertisement on Google search engine 2.Providing analytics services 3. Sending email reports',
-//   clientGoals:
-//     '1. Selling Model S Tesla Cars 2. Getting industry trends through analytics 3. Giving confirmation to internal team, dealers, customers about their purchase through email',
-//   budget: '$1.5 million',
-//   timeline: '3 years',
-//   deliverables: 'Website traffic, reports, email confirmation.',
-//   uniqueSellingPosition: 'Monopoly in the search business',
-//   termsAndConditions:
-//     '1. Quality traffic should be delivered 2. Relevant traffic should be delivered 3.Reporting of google analytics should have less than 30 seconds lag time 4.All emails should be delivered in main inbox, not in spam or promotion',
-//   clientResponsibilities:
-//     '1. Choosing right search keywords 2. Making a good landing page with a form 3.Placing analytics code on landing page 4.Sending less that 1 million traffic per minute 5. Analytics code should be implemented correctly 6.Sending no promotional emails through main email addresses 7.Choosing 3 email addresses for all business transaction related emails',
-//   previousSuccessStory:
-//     'have worked with Amazon since 1996 and have driven more that 25 billion traffic for their e-commerce store',
-//   clientName: 'Tesla Inc',
-//   // clientBusinessType:
-//   //   'Partnership (General Partnership or Limited Partnership)',
-//   clientBusinessIndustry: 'automotive, technology',
-//   clientBusinessOverview:
-//     "Tesla, Inc. (/ˈtɛslə/ TESS-lə or /ˈtɛzlə/ TEZ-lə[a]) is an American multinational automotive and clean energy company headquartered in Austin, Texas, which designs, manufactures and sells electric vehicles, stationary battery energy storage devices from home to grid-scale, solar panels and solar shingles, and related products and services. Tesla was incorporated in July 2003 by Martin Eberhard and Marc Tarpenning as Tesla Motors. The company's name is a tribute to inventor and electrical engineer Nikola Tesla. In February 2004 Elon Musk joined as the company's largest shareholder and in 2008 he was named CEO. In 2008, the company began production of its first car model, the Roadster sports car, followed by the Model S sedan in 2012, the Model X SUV in 2015, the Model 3 sedan in 2017, the Model Y crossover in 2020, the Tesla Semi truck in 2022 and the Cybertruck pickup truck in 2023. The Model 3 is the all-time bestselling plug-in electric car worldwide, and in June 2021 became the first electric car to sell 1 million units globally.[5] In 2023, the Model Y was the best-selling vehicle, of any kind, globally.[2] Tesla is one of the world's most valuable companies. In October 2021, Tesla's market capitalization temporarily reached $1 trillion, the sixth company to do so in U.S. history. In 2022, the company led the battery electric vehicle market, with 18% share. As of 2023, it is the world's most valuable automaker. Also in 2023, the company was ranked 69th in the Forbes Global 2000.[6]",
-//   clientBusinessServices: 'Selling electric cars and trucks',
-
-//   clientEmail: 'tesla@gmail.com',
-//   clientAddress: 'Los Angeles, California',
-//   clientUrl: 'http://www.tesla.com',
-//   clientRepName: 'Representaive Kilcullen',
-//   clientRepRole: 'Communications Manager',
-//   clientRepEmail: 'patrickjkilcullen@gmail.com',
-// };
 
 export const CreateProposal = ({ proposal }) => {
   const formikRef = useRef();
   const { user } = useAuthUser();
   const business = useSelector(({ business }) => business.singleBusiness);
-
   const userId = user._id;
   const businessId = user.businessId?._id;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [validationError, setValidationError] = useState(false);
+  const [validationErrorList, setValidationErrorList] = useState([]);
+  const [formSection, setFormSection] = useState('businessInformation');
+  const [validationSchema, setValidationSchema] = useState('');
+  const [changeForm, setChangeForm] = useState(null);
+  const [nextCreateBusinessForm, setNextCreateBusinessForm] = useState(false);
 
   // GET BUSINESS INFO on mount
   // only is businessID exists
@@ -188,9 +155,6 @@ export const CreateProposal = ({ proposal }) => {
   });
 
   const clientValidationSchema = yup.object({
-    // clientResponsibilities: yup
-    //   .string()
-    //   .required('Client Responsibilities Required'),
     clientName: yup.string().required('Client Name Required'),
     clientEmail: yup
       .string()
@@ -201,8 +165,6 @@ export const CreateProposal = ({ proposal }) => {
     clientBusinessOverview: yup.string().required('Client Overview Required'),
     clientBusinessIndustry: yup.string().required('Client Industry Required'),
     clientBusinessType: yup.string().required('Client Business Type Required'),
-
-    //  businessType: yup.string().required('Business Type Required'),
     clientUrl: yup
       .string()
       .url('Invalid url format')
@@ -234,13 +196,6 @@ export const CreateProposal = ({ proposal }) => {
       .required('Client Responsibilities Required'),
   });
 
-  // VALIDATION ERROR: if error in validationschema when submitting, set to true to display error
-  const [validationError, setValidationError] = useState(false);
-  const [validationErrorList, setValidationErrorList] = useState([]);
-
-  const [formSection, setFormSection] = useState('businessInformation');
-  const [validationSchema, setValidationSchema] = useState('');
-
   // VALIDATION SCHEMA USED BASED ON FORM SECTION
   useEffect(() => {
     switch (formSection) {
@@ -258,25 +213,6 @@ export const CreateProposal = ({ proposal }) => {
         break;
     }
   }, [formSection]);
-
-  // CHECK FOR ERRORS - cant change form section with errors
-  const [changeForm, setChangeForm] = useState(null);
-
-  const [nextCreateBusinessForm, setNextCreateBusinessForm] = useState(false);
-  const checkFormErrorsOLD = async (type) => {
-    const errors = await formikRef.current.validateForm();
-
-    if (Object.keys(errors).length === 0) {
-      setValidationError(false);
-      setValidationErrorList([]);
-      setChangeForm(true);
-    } else {
-      setValidationErrorList([]);
-      setValidationError(true);
-      setValidationErrorList(Object.values(errors));
-      setChangeForm(false);
-    }
-  };
 
   // CHECK FORM ERRORS
   // needed to get error mesages on fields to work properly w/stepper
@@ -305,15 +241,12 @@ export const CreateProposal = ({ proposal }) => {
     formikRef.current.submitForm();
   };
 
-
-
- 
+  // ADD TITLE
   const handleAddTitle = (title) => {
-
-  let sanitizedTitle = DOMPurify.sanitize(title);
-  setProposalVersion((prevVersion) => {
-    return (
-      `
+    let sanitizedTitle = DOMPurify.sanitize(title);
+    setProposalVersion((prevVersion) => {
+      return (
+        `
         <!-- Add a title at the top -->
         <div style="font-size: 20px; font-weight: bold; margin-bottom: 15px;">
           ${sanitizedTitle}
@@ -334,10 +267,9 @@ export const CreateProposal = ({ proposal }) => {
           </div>
         </div>
       ` + prevVersion
-    );
-  });
-};
-
+      );
+    });
+  };
 
   return (
     <>
@@ -354,12 +286,11 @@ export const CreateProposal = ({ proposal }) => {
             md: 10,
             lg: 10,
           },
-
         }}
       >
         {proposal ? null : 'Create a New Proposal'}
       </Box>
-    
+
       <Formik
         innerRef={formikRef}
         validateOnChange={true}
@@ -367,29 +298,25 @@ export const CreateProposal = ({ proposal }) => {
         initialValues={{
           title: proposal?.title || '',
           _id: proposal?._id || '',
-          businessName:
-            proposal?.metadata?.businessInfo?.businessName || '',
+          businessName: proposal?.metadata?.businessInfo?.businessName || '',
           businessOverview:
             proposal?.metadata?.businessInfo?.businessOverview || '',
-          businessEmail:
-            proposal?.metadata?.businessInfo?.businessEmail || '',
+          businessEmail: proposal?.metadata?.businessInfo?.businessEmail || '',
           businessAddress:
             proposal?.metadata?.businessInfo?.businessAddress || '',
           businessUrl: proposal?.metadata?.businessInfo?.businessUrl || '',
           services: proposal?.metadata?.businessInfo?.services || '',
           businessRepName:
-            proposal?.businessInfo?.businessRepName ||
-            testInfo.businessRepName,
+            proposal?.businessInfo?.businessRepName || testInfo.businessRepName,
           businessRepRole:
-            proposal?.businessInfo?.businessRepRole ||
-            testInfo.businessRepRole,
+            proposal?.businessInfo?.businessRepRole || testInfo.businessRepRole,
           businessRepEmail:
             proposal?.businessInfo?.businessRepEmail ||
             testInfo.businessRepEmail,
 
           businessServices: proposal?.businessInfo?.businessServices || ' ',
           businessType: proposal?.businessInfo?.businessType || '',
-        customIndustry: null,
+          customIndustry: null,
 
           scopeOfWork:
             proposal?.metadata?.businessInfo?.scopeOfWork ||
@@ -397,8 +324,7 @@ export const CreateProposal = ({ proposal }) => {
           previousSuccessStory:
             proposal?.metadata?.businessInfo?.previousSuccessStory ||
             testInfo.previousSuccessStory,
-          clientGoals:
-            proposal?.metadata?.clientGoals || testInfo.clientGoals,
+          clientGoals: proposal?.metadata?.clientGoals || testInfo.clientGoals,
           projectTimeline:
             proposal?.metadata?.projectTimeline || testInfo.timeline,
           budgetAndPricing:
@@ -415,8 +341,7 @@ export const CreateProposal = ({ proposal }) => {
             proposal?.metadata?.clientResponsibilities ||
             testInfo.clientResponsibilities,
 
-          clientName:
-            proposal?.clientInfo?.clientName || testInfo.clientName,
+          clientName: proposal?.clientInfo?.clientName || testInfo.clientName,
           clientBusinessType:
             proposal?.clientInfo?.clientBusinessType ||
             testInfo.clientBusinessType,
@@ -440,66 +365,62 @@ export const CreateProposal = ({ proposal }) => {
             proposal?.clientInfo?.clientRepRole || testInfo.clientRepRole,
           clientRepEmail:
             proposal?.clientInfo?.clientRepEmail || testInfo.clientRepEmail,
-        customClientIndustry: null
+          customClientIndustry: null,
         }}
-
         // REAL INITIAL VALUES
-//         initialValues={{
-// title: proposal?.title || '',
+        //         initialValues={{
+        // title: proposal?.title || '',
 
-//           _id: proposal?._id || '',
-//           businessName: proposal?.metadata?.businessInfo?.businessName || '',
-//           businessOverview:
-//             proposal?.metadata?.businessInfo?.businessOverview || '',
-//           businessEmail: proposal?.metadata?.businessInfo?.businessEmail || '',
-//           businessAddress:
-//             proposal?.metadata?.businessInfo?.businessAddress || '',
-//           businessUrl: proposal?.metadata?.businessInfo?.businessUrl || '',
-//           businessIndustry:
-//             proposal?.metadata?.businessInfo?.businessIndustry || '',
-//           services: proposal?.metadata?.businessInfo?.services || '',
-//           businessRepName: proposal?.businessInfo?.businessRepName || '',
-//           businessRepRole: proposal?.businessInfo?.businessRepRole || '',
-//           businessRepEmail: proposal?.businessInfo?.businessRepEmail || '',
+        //           _id: proposal?._id || '',
+        //           businessName: proposal?.metadata?.businessInfo?.businessName || '',
+        //           businessOverview:
+        //             proposal?.metadata?.businessInfo?.businessOverview || '',
+        //           businessEmail: proposal?.metadata?.businessInfo?.businessEmail || '',
+        //           businessAddress:
+        //             proposal?.metadata?.businessInfo?.businessAddress || '',
+        //           businessUrl: proposal?.metadata?.businessInfo?.businessUrl || '',
+        //           businessIndustry:
+        //             proposal?.metadata?.businessInfo?.businessIndustry || '',
+        //           services: proposal?.metadata?.businessInfo?.services || '',
+        //           businessRepName: proposal?.businessInfo?.businessRepName || '',
+        //           businessRepRole: proposal?.businessInfo?.businessRepRole || '',
+        //           businessRepEmail: proposal?.businessInfo?.businessRepEmail || '',
 
-//           businessServices: proposal?.businessInfo?.businessServices || ' ',
-//           businessType: proposal?.businessInfo?.businessType || '',
+        //           businessServices: proposal?.businessInfo?.businessServices || ' ',
+        //           businessType: proposal?.businessInfo?.businessType || '',
 
-//           customIndustry: null,
+        //           customIndustry: null,
 
-//           scopeOfWork: proposal?.metadata?.businessInfo?.scopeOfWork || '',
-//           previousSuccessStory:
-//             proposal?.metadata?.businessInfo?.previousSuccessStory || '',
-//           clientGoals: proposal?.metadata?.clientGoals || '',
-//           projectTimeline: proposal?.metadata?.projectTimeline || '',
-//           budgetAndPricing: proposal?.metadata?.budgetAndPricing || '',
-//           deliverables: proposal?.metadata?.deliverables || '',
-//           uniqueSellingPosition:
-//             proposal?.metadata?.uniqueSellingPosition || '',
-//           termsAndConditions: proposal?.metadata?.termsAndConditions || '',
-//           clientResponsibilities:
-//             proposal?.metadata?.clientResponsibilities || '',
+        //           scopeOfWork: proposal?.metadata?.businessInfo?.scopeOfWork || '',
+        //           previousSuccessStory:
+        //             proposal?.metadata?.businessInfo?.previousSuccessStory || '',
+        //           clientGoals: proposal?.metadata?.clientGoals || '',
+        //           projectTimeline: proposal?.metadata?.projectTimeline || '',
+        //           budgetAndPricing: proposal?.metadata?.budgetAndPricing || '',
+        //           deliverables: proposal?.metadata?.deliverables || '',
+        //           uniqueSellingPosition:
+        //             proposal?.metadata?.uniqueSellingPosition || '',
+        //           termsAndConditions: proposal?.metadata?.termsAndConditions || '',
+        //           clientResponsibilities:
+        //             proposal?.metadata?.clientResponsibilities || '',
 
-//           clientName: proposal?.clientInfo?.clientName || '',
-//           clientBusinessType: proposal?.clientInfo?.clientBusinessType || '',
-//           clientBusinessIndustry:
-//             proposal?.clientInfo?.clientBusinessIndustry || '',
-//           clientBusinessOverview:
-//             proposal?.clientInfo?.clientBusinessOverview || '',
-//           clientBusinessServices:
-//             proposal?.clientInfo?.clientBusinessServices || '',
-//           clientEmail: proposal?.clientInfo?.clientEmail || '',
-//           clientAddress: proposal?.clientInfo?.clientAddress || '',
-//           clientUrl: proposal?.clientInfo?.clientUrl || '',
-//           clientRepName: proposal?.clientInfo?.clientRepName || '',
-//           clientRepRole: proposal?.clientInfo?.clientRepRole || '',
-//           clientRepEmail: proposal?.clientInfo?.clientRepEmail || '',
-//           customClientIndustry: null,
+        //           clientName: proposal?.clientInfo?.clientName || '',
+        //           clientBusinessType: proposal?.clientInfo?.clientBusinessType || '',
+        //           clientBusinessIndustry:
+        //             proposal?.clientInfo?.clientBusinessIndustry || '',
+        //           clientBusinessOverview:
+        //             proposal?.clientInfo?.clientBusinessOverview || '',
+        //           clientBusinessServices:
+        //             proposal?.clientInfo?.clientBusinessServices || '',
+        //           clientEmail: proposal?.clientInfo?.clientEmail || '',
+        //           clientAddress: proposal?.clientInfo?.clientAddress || '',
+        //           clientUrl: proposal?.clientInfo?.clientUrl || '',
+        //           clientRepName: proposal?.clientInfo?.clientRepName || '',
+        //           clientRepRole: proposal?.clientInfo?.clientRepRole || '',
+        //           clientRepEmail: proposal?.clientInfo?.clientRepEmail || '',
+        //           customClientIndustry: null,
 
-        
-
-          
-//         }}
+        //         }}
         // Don't validate if proposal(proposal): If there is a selevtedBlog(proposal), validationschema will have errors and prevent submitting
         validationSchema={!proposal ? validationSchema : null}
         // SUBMIT
@@ -583,7 +504,7 @@ export const CreateProposal = ({ proposal }) => {
             ) {
               dispatch(
                 onGenerateProposal({
-                  title:  data?.title || '',
+                  title: data?.title || '',
                   businessId: businessId,
                   creator: userId,
                   signed: false,
@@ -636,7 +557,6 @@ export const CreateProposal = ({ proposal }) => {
                 // navigte to edit project after proposal is genereated
 
                 if (res.payload) {
-
                   // ADD Proposal to User proposal array
                   try {
                     await dispatch(onAddProposal(res.payload.data));
@@ -714,8 +634,6 @@ export const CreateProposal = ({ proposal }) => {
 
                   dispatch(fetchError(error));
                 }
-
-                // navigate(`/sent-project/${proposal?._id}`);
               } catch (error) {
                 setSubmitting(false);
                 dispatch(fetchError(`Error Sending Proposal: ${error}`));
@@ -802,9 +720,6 @@ export const CreateProposal = ({ proposal }) => {
           </Form>
         )}
       </Formik>
-      {/* FETCH CONTEXT */}
-      {/* <AppInfoView type='context' /> */}
-      {/* <AppInfoView  /> */}
     </>
   );
 };

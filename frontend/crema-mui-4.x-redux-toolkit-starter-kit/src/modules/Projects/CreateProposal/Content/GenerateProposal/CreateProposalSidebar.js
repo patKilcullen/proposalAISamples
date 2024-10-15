@@ -28,7 +28,6 @@ const steps = [
 const CreateProposalSideBar = ({ activeSection }) => {
   // CURRENT STEP: ref assocaited with the active step
   const [currentStepRef, setCurrentStepRef] = useState(null);
-
   // ACTIVE STEP: step that is cirrently highlighes, with associated contnet in Form Container
   const [activeStep, setActiveStep] = useState(0);
 
@@ -83,10 +82,7 @@ const CreateProposalSideBar = ({ activeSection }) => {
               <StepLabel>{step.label}</StepLabel>
 
               <StepContent>
-                <Typography >
-                  {step.description}
-    
-                </Typography>
+                <Typography>{step.description}</Typography>
               </StepContent>
             </Step>
           ))}
