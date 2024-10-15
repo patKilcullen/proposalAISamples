@@ -4,27 +4,25 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { isEmptyObject } from '@crema/helpers/ApiHelper';
 
-import CreateProposal from '../../../CreateProposal';
+import CreateProposal from '../..';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSingleProposal,} from '../../../../../toolkit/actions';
+import { getSingleProposal } from '../../../../../toolkit/actions';
 import { removeProposal } from '../../../../../toolkit/reducers/Proposals';
 import AppInfoView from '@crema/components/AppInfoView';
-
 
 const EditProposal = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const selectedProposal = useSelector(({ proposals }) => proposals.proposal);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  
-// get proposal or get error
+  // get proposal or get error
   useEffect(() => {
-    dispatch(getSingleProposal(id)).then((res)=>{
-        if(res?.response?.status === 403){
-          navigate('/error-pages/error-403')
-        }
-      });
+    dispatch(getSingleProposal(id)).then((res) => {
+      if (res?.response?.status === 403) {
+        navigate('/error-pages/error-403');
+      }
+    });
   }, [dispatch, id]);
 
   // CLEANUP ON UNMOUNT - remove proposal from store to
